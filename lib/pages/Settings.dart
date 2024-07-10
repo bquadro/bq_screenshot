@@ -34,6 +34,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _model.s3SecretKey ??= TextEditingController();
     _model.s3SecretKeyFocusNode ??= FocusNode();
 
+    _model.s3Bucket ??= TextEditingController();
+    _model.s3BucketFocusNode ??= FocusNode();
+
     _model.saveDirectoryPath ??= TextEditingController();
     _model.saveDirectoryPathFocusNode ??= FocusNode();
 
@@ -197,7 +200,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.textController1Validator
+                                    validator: _model.s3EndpointValidator
                                         .asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage?.Settings.s3_endPoint =
@@ -259,7 +262,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.textController2Validator
+                                    validator: _model.s3AccessKeyValidator
                                         .asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage?.Settings.s3_accessKey =
@@ -321,10 +324,72 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.textController3Validator
+                                    validator: _model.s3SecretKeyValidator
                                         .asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage?.Settings.s3_secretKey =
+                                          text;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: 200,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8, 0, 8, 10),
+                                  child: TextFormField(
+                                    controller: _model.s3Bucket,
+                                    focusNode: _model.s3BucketFocusNode,
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Bucket',
+                                      labelStyle: TextStyle(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0,
+                                      ),
+                                      hintStyle: TextStyle(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0,
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: ColorsUtil.accent1,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: ColorsUtil.primary,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: ColorsUtil.error,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: ColorsUtil.error,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    style: TextStyle(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0,
+                                    ),
+                                    validator: _model.s3BucketValidator
+                                        .asValidator(context),
+                                    onChanged: (text) {
+                                      _settingsStorage?.Settings.s3_bucket =
                                           text;
                                     },
                                   ),
@@ -423,7 +488,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           letterSpacing: 0,
                                         ),
                                         validator: _model
-                                            .textController4Validator
+                                            .saveDirectoryPathValidator
                                             .asValidator(context),
                                         onChanged: (text) {
                                           _settingsStorage?.Settings
@@ -491,10 +556,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _model.s3Endpoint.text = data.Settings.s3_endPoint;
     _model.s3AccessKey.text = data.Settings.s3_accessKey;
     _model.s3SecretKey.text = data.Settings.s3_secretKey;
-    _model.saveDirectoryPath.text =
-        data.Settings.saveDirectoryPath.isEmpty == false
-            ? data.Settings.saveDirectoryPath
-            : await _settingsStorage.getDefaultSaveDirectoryPath();
+    _model.s3Bucket.text = data.Settings.s3_bucket;
+    _model.saveDirectoryPath.text = data.Settings.saveDirectoryPath;
     setState(() {});
   }
 }

@@ -11,19 +11,24 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
   // State field(s) for TextField widget.
   FocusNode? s3EndpointFocusNode;
   TextEditingController? s3Endpoint;
-  String? Function(BuildContext, String?)? textController1Validator;
+  String? Function(BuildContext, String?)? s3EndpointValidator;
   // State field(s) for TextField widget.
   FocusNode? s3AccessKeyFocusNode;
   TextEditingController? s3AccessKey;
-  String? Function(BuildContext, String?)? textController2Validator;
+  String? Function(BuildContext, String?)? s3AccessKeyValidator;
   // State field(s) for TextField widget.
   FocusNode? s3SecretKeyFocusNode;
   TextEditingController? s3SecretKey;
-  String? Function(BuildContext, String?)? textController3Validator;
+  String? Function(BuildContext, String?)? s3SecretKeyValidator;
+
+  FocusNode? s3BucketFocusNode;
+  TextEditingController? s3Bucket;
+  String? Function(BuildContext, String?)? s3BucketValidator;
+
   // State field(s) for TextField widget.
   FocusNode? saveDirectoryPathFocusNode;
   TextEditingController? saveDirectoryPath;
-  String? Function(BuildContext, String?)? textController4Validator;
+  String? Function(BuildContext, String?)? saveDirectoryPathValidator;
 
   @override
   void initState(BuildContext context) {}

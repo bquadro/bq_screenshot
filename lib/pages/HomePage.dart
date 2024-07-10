@@ -6,6 +6,8 @@ import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:minio/io.dart';
+import 'package:minio/minio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 
@@ -164,9 +166,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                   print('Open Settings');
                   Navigator.push(
-                    context,
-                     MaterialPageRoute(builder: (context) => const SettingsWidget())
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SettingsWidget()));
                 },
                 text: 'Настройки',
                 icon: Icon(
@@ -244,13 +246,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   Future<void> _handleClickCapture(CaptureMode mode) async {
-    Directory? saveDirectoryPath = await getApplicationDocumentsDirectory();
+    Settingstorage _settings = await Settingstorage().loadSettings();
 
     String imageName =
         'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
-    String imagePath =
-        '${saveDirectoryPath.path}/screen_capturer_example/Screenshots/$imageName';
-    print(imagePath);
+
+    String imagePath = '${_settings.Settings.saveDirectoryPath}/$imageName';
 
     _lastCapturedData = await screenCapturer.capture(
       mode: mode,
@@ -261,10 +262,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
     if (_lastCapturedData != null) {
       print('Screenshot Complete');
+      await uploadToS3(imageName, imagePath);
     } else {
       // ignore: avoid_print
       print('User canceled capture');
     }
     setState(() {});
+  }
+
+  Future<void> uploadToS3(String fileName, String filePath) async {
+    Settingstorage _settings = await Settingstorage().loadSettings();
+    if (_settings.Settings.s3_endPoint.isNotEmpty &&
+        _settings.Settings.s3_secretKey.isNotEmpty &&
+        _settings.Settings.s3_accessKey.isNotEmpty) {
+      final minio = Minio(
+        endPoint: _settings.Settings.s3_endPoint,
+        accessKey: _settings.Settings.s3_accessKey,
+        secretKey: _settings.Settings.s3_secretKey,
+      );
+      await minio.fPutObject(_settings.Settings.s3_bucket, fileName, filePath);
+    }
   }
 }
