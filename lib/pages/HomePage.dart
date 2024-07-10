@@ -274,13 +274,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     Settingstorage _settings = await Settingstorage().loadSettings();
     if (_settings.Settings.s3_endPoint.isNotEmpty &&
         _settings.Settings.s3_secretKey.isNotEmpty &&
-        _settings.Settings.s3_accessKey.isNotEmpty) {
+        _settings.Settings.s3_accessKey.isNotEmpty &&
+        _settings.Settings.s3_bucket.isNotEmpty) {
       final minio = Minio(
         endPoint: _settings.Settings.s3_endPoint,
         accessKey: _settings.Settings.s3_accessKey,
         secretKey: _settings.Settings.s3_secretKey,
       );
-      await minio.fPutObject(_settings.Settings.s3_bucket, fileName, filePath);
+      var result = await minio.fPutObject(
+          _settings.Settings.s3_bucket, fileName, filePath);
+      if (result.isNotEmpty) {
+        Clipboard.setData(ClipboardData(
+            text:
+                "https://${_settings.Settings.s3_endPoint}/${_settings.Settings.s3_bucket}/$fileName"));
+      }
     }
   }
 }
