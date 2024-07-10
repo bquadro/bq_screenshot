@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  buffer:
+    dependency: transitive
+    description:
+      name: buffer
+      sha256: "389da2ec2c16283c8787e0adaede82b1842102f8c8aae2f49003a766c5c6b3d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -129,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   cross_file:
     dependency: transitive
     description:
@@ -608,6 +624,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   mime_type:
     dependency: transitive
     description:
@@ -616,6 +640,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  minio:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "1fb87f29177519e732e19e4594ff68fb243b0925"
+      url: "https://github.com/SatanaKonst/minio-dart.git"
+    source: git
+    version: "3.5.0"
   native_device_orientation:
     dependency: transitive
     description:
@@ -832,6 +865,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  screen_capturer:
+    dependency: "direct main"
+    description:
+      name: screen_capturer
+      sha256: "0c23dc24e0fff79e5a4162e71a32fc25cd947c6af70cf08db2f099a5ce660f30"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  screen_capturer_linux:
+    dependency: transitive
+    description:
+      name: screen_capturer_linux
+      sha256: ee8481b32d83a9bdcef598d20d1fcfc4f36dee6c43b31184f0d829bb32fab4ba
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  screen_capturer_macos:
+    dependency: transitive
+    description:
+      name: screen_capturer_macos
+      sha256: "92b67dfbae3263d2228e2438b74dc9aae8cdc9ccacca152f0f8e8531ed5aff8b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  screen_capturer_platform_interface:
+    dependency: transitive
+    description:
+      name: screen_capturer_platform_interface
+      sha256: f53d3b955bb413cf4f9bd928c501297a3eb490a72b6a147c8384d4cd5feb872a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  screen_capturer_windows:
+    dependency: transitive
+    description:
+      name: screen_capturer_windows
+      sha256: "141542ff0ce1dae0df9c6625182c480c973c20282dc85f866fbc9215dcbbe04f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -888,6 +961,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  shell_executor:
+    dependency: transitive
+    description:
+      name: shell_executor
+      sha256: "9c024546fc96470a6b96be9902f0bc05347a017a7638ed8d93c77e8d77eb3c3c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.6"
   simple_gesture_detector:
     dependency: transitive
     description:
@@ -1189,6 +1270,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.0"
 sdks:
   dart: ">=3.4.3 <4.0.0"
   flutter: ">=3.22.0"

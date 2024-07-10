@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   rive_common
+  screen_capturer_windows
   url_launcher_windows
 )
 

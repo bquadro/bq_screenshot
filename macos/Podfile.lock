@@ -10,6 +10,8 @@ PODS:
     - FlutterMacOS
   - rive_common (0.0.1):
     - FlutterMacOS
+  - screen_capturer_macos (0.0.1):
+    - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -23,6 +25,7 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - rive_common (from `Flutter/ephemeral/.symlinks/plugins/rive_common/macos`)
+  - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
@@ -38,6 +41,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   rive_common:
     :path: Flutter/ephemeral/.symlinks/plugins/rive_common/macos
+  screen_capturer_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos
   shared_preferences_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   sqflite:
@@ -50,6 +55,7 @@ SPEC CHECKSUMS:
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   rive_common: 0f0aadf670f0c6a7872dfe3e6186f112a5319108
+  screen_capturer_macos: e91a66e1eeefd5e4fe068bb1bffc053cc34b63b8
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: 5f437abeda8c85500ceb03f5c1938a8c5a705399

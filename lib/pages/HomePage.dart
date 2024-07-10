@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:bq_screenshot/utils/ColorsUtil.dart';
+import 'package:bq_screenshot/utils/SettingsStorage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screen_capturer/screen_capturer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +25,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  CapturedData? _lastCapturedData;
+  Uint8List? _imageBytesFromClipboard;
+
+  var _settingsStorage;
+
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
+    _settingsStorage = Settingstorage();
   }
 
   @override
@@ -35,8 +47,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-      _model.unfocusNode.canRequestFocus
+      onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -59,7 +70,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
               child: FFButtonWidget(
                 onPressed: () {
-                  print('Button pressed ...');
+                  _handleClickCapture(CaptureMode.region);
                 },
                 text: 'Область',
                 icon: Icon(
@@ -89,7 +100,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
               child: FFButtonWidget(
                 onPressed: () {
-                  print('Button pressed ...');
+                  _handleClickCapture(CaptureMode.window);
                 },
                 text: 'Окно',
                 icon: Icon(
@@ -119,7 +130,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
               child: FFButtonWidget(
                 onPressed: () {
-                  print('Button pressed ...');
+                  _handleClickCapture(CaptureMode.screen);
                 },
                 text: 'Экран',
                 icon: Icon(
@@ -187,51 +198,78 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 100,
-                height: 0,
-                constraints: BoxConstraints(
-                  minWidth: MediaQuery
-                      .sizeOf(context)
-                      .width,
-                  minHeight: MediaQuery
-                      .sizeOf(context)
-                      .height * 0.7,
-                  maxWidth: MediaQuery
-                      .sizeOf(context)
-                      .width,
-                  maxHeight: MediaQuery
-                      .sizeOf(context)
-                      .height * 1,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorsUtil.secondaryBackground,
-                ),
-                alignment: AlignmentDirectional(0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1551908222-0b03b185b98a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyfHxiZWF1dGlmdWwlMjBvY2VhbnxlbnwwfHx8fDE3MjA1NTM3NTN8MA&ixlib=rb-4.0.3&q=80&w=1080',
-                            fit: BoxFit.cover,
+              if (_lastCapturedData != null &&
+                  _lastCapturedData?.imagePath != null)
+                Container(
+                  width: 100,
+                  height: 0,
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.sizeOf(context).width,
+                    minHeight: MediaQuery.sizeOf(context).height * 0.7,
+                    maxWidth: MediaQuery.sizeOf(context).width,
+                    maxHeight: MediaQuery.sizeOf(context).height * 1,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorsUtil.secondaryBackground,
+                  ),
+                  alignment: AlignmentDirectional(0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              File(_lastCapturedData!.imagePath!),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _handleClickCapture(CaptureMode mode) async {
+    Directory? saveDirectoryPath = await getApplicationDocumentsDirectory();
+
+    String imageName =
+        'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
+    String imagePath =
+        '${saveDirectoryPath.path}/screen_capturer_example/Screenshots/$imageName';
+    print(imagePath);
+
+    _lastCapturedData = await screenCapturer.capture(
+      mode: mode,
+      imagePath: imagePath,
+      copyToClipboard: true,
+      silent: true,
+    );
+
+    if (_lastCapturedData != null) {
+      // ignore: avoid_print
+      // print(_lastCapturedData!.toJson());
+      print('Create screenshot');
+
+      Clipboard.setData(
+        ClipboardData(
+            text:
+                'https://s3storage-api.bquadro.ru/screenshot-test/$imageName'),
+      );
+    } else {
+      // ignore: avoid_print
+      print('User canceled capture');
+    }
+    setState(() {});
   }
 }
