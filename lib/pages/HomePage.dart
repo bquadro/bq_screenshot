@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bq_screenshot/pages/Settings.dart';
 import 'package:bq_screenshot/utils/ColorsUtil.dart';
 import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +8,6 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
@@ -163,7 +162,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   // OpenSettings
 
                   print('Open Settings');
-                  // context.pushNamed('Settings');
+                  Navigator.push(
+                    context,
+                     MaterialPageRoute(builder: (context) => const SettingsWidget())
+                  );
                 },
                 text: 'Настройки',
                 icon: Icon(
@@ -257,15 +259,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
 
     if (_lastCapturedData != null) {
-      // ignore: avoid_print
-      // print(_lastCapturedData!.toJson());
-      print('Create screenshot');
-
-      Clipboard.setData(
-        ClipboardData(
-            text:
-                'https://s3storage-api.bquadro.ru/screenshot-test/$imageName'),
-      );
+      print('Screenshot Complete');
     } else {
       // ignore: avoid_print
       print('User canceled capture');

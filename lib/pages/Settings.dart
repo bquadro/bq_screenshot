@@ -69,6 +69,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             FFButtonWidget(
               onPressed: () {
                 print('Button pressed ...');
+                Navigator.pop(context);
               },
               text: 'Сохранить',
               icon: Icon(
