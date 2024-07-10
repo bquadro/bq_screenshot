@@ -1,3 +1,4 @@
+import 'package:bq_screenshot/utils/ColorsUtil.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,13 +52,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: ColorsUtil.secondaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
+          backgroundColor: ColorsUtil.primary,
           automaticallyImplyLeading: false,
           title: Text(
             'Настройки',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
+            style: TextStyle(
               fontFamily: 'Outfit',
               color: Colors.white,
               fontSize: 22,
@@ -78,8 +79,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 height: 40,
                 padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                 iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                color: FlutterFlowTheme.of(context).success,
-                textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                color: ColorsUtil.success,
+                textStyle: TextStyle(
                   fontFamily: 'Readex Pro',
                   color: Colors.white,
                   letterSpacing: 0,
@@ -109,7 +110,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   minHeight: MediaQuery.sizeOf(context).height * 0.9,
                 ),
                 decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  color: ColorsUtil.secondaryBackground,
                 ),
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
@@ -120,19 +121,17 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       Expanded(
                         child: Padding(
                           padding:
-                          EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
                                 padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: Text(
                                   'Подключение к Minio',
                                   textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  style: TextStyle(
                                     fontFamily: 'Readex Pro',
                                     fontSize: 18,
                                     letterSpacing: 0,
@@ -152,54 +151,44 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Endpoint',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      labelStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      hintStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .accent1,
+                                          color: ColorsUtil.accent1,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                          color: ColorsUtil.primary,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
+                                    style: TextStyle(
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
@@ -220,54 +209,44 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Access Key',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      labelStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      hintStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .accent1,
+                                          color: ColorsUtil.accent1,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                          color: ColorsUtil.primary,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
+                                    style: TextStyle(
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
@@ -288,54 +267,44 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Secret Key',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      labelStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
+                                      hintStyle: TextStyle(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0,
                                       ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .accent1,
+                                          color: ColorsUtil.accent1,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                          color: ColorsUtil.primary,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
+                                          color: ColorsUtil.error,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
+                                    style: TextStyle(
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
@@ -358,12 +327,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               alignment: AlignmentDirectional(0, 0),
                               child: Padding(
                                 padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                                 child: Text(
                                   'Папка для сохранения',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  style: TextStyle(
                                     fontFamily: 'Readex Pro',
                                     fontSize: 18,
                                     letterSpacing: 0,
@@ -374,11 +341,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             ),
                             Padding(
                               padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                                  EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Expanded(
                                     child: Padding(
@@ -391,65 +358,49 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Папка для сохранения',
-                                          labelStyle:
-                                          FlutterFlowTheme.of(context)
-                                              .labelMedium
-                                              .override(
+                                          labelStyle: TextStyle(
                                             fontFamily: 'Readex Pro',
                                             letterSpacing: 0,
                                           ),
-                                          hintStyle:
-                                          FlutterFlowTheme.of(context)
-                                              .labelMedium
-                                              .override(
+                                          hintStyle: TextStyle(
                                             fontFamily: 'Readex Pro',
                                             letterSpacing: 0,
                                           ),
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                              color:
-                                              FlutterFlowTheme.of(context)
-                                                  .alternate,
+                                              color: ColorsUtil.alternate,
                                               width: 2,
                                             ),
                                             borderRadius:
-                                            BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                              color:
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
+                                              color: ColorsUtil.primary,
                                               width: 2,
                                             ),
                                             borderRadius:
-                                            BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                           ),
                                           errorBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                              color:
-                                              FlutterFlowTheme.of(context)
-                                                  .error,
+                                              color: ColorsUtil.error,
                                               width: 2,
                                             ),
                                             borderRadius:
-                                            BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                           ),
                                           focusedErrorBorder:
-                                          UnderlineInputBorder(
+                                              UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                              color:
-                                              FlutterFlowTheme.of(context)
-                                                  .error,
+                                              color: ColorsUtil.error,
                                               width: 2,
                                             ),
                                             borderRadius:
-                                            BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                           ),
                                         ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
+                                        style: TextStyle(
                                           fontFamily: 'Readex Pro',
                                           letterSpacing: 0,
                                         ),
@@ -474,17 +425,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                         options: FFButtonOptions(
                                           height: 40,
                                           padding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              24, 0, 24, 0),
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 0, 24, 0),
                                           iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0, 0, 0, 0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          textStyle:
-                                          FlutterFlowTheme.of(context)
-                                              .titleSmall
-                                              .override(
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 0),
+                                          color: ColorsUtil.primary,
+                                          textStyle: TextStyle(
                                             fontFamily: 'Readex Pro',
                                             color: Colors.white,
                                             letterSpacing: 0,
@@ -495,7 +442,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
                                     ],

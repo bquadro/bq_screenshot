@@ -35,7 +35,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
+      onTap: () =>
+      _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -129,8 +130,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   height: 40,
                   padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                   iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                  color: FlutterFlowTheme.of(context).success,
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                  color: ColorsUtil.success,
+                  textStyle: TextStyle(
                     fontFamily: 'Readex Pro',
                     color: Colors.white,
                     letterSpacing: 0,
@@ -150,7 +151,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 onPressed: () async {
                   // OpenSettings
 
-                  context.pushNamed('Settings');
+                  print('Open Settings');
+                  // context.pushNamed('Settings');
                 },
                 text: 'Настройки',
                 icon: Icon(
@@ -161,8 +163,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   height: 40,
                   padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                   iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                  color: FlutterFlowTheme.of(context).error,
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                  color: ColorsUtil.error,
+                  textStyle: TextStyle(
                     fontFamily: 'Readex Pro',
                     color: Colors.white,
                     letterSpacing: 0,
@@ -189,13 +191,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 width: 100,
                 height: 0,
                 constraints: BoxConstraints(
-                  minWidth: MediaQuery.sizeOf(context).width,
-                  minHeight: MediaQuery.sizeOf(context).height * 0.7,
-                  maxWidth: MediaQuery.sizeOf(context).width,
-                  maxHeight: MediaQuery.sizeOf(context).height * 1,
+                  minWidth: MediaQuery
+                      .sizeOf(context)
+                      .width,
+                  minHeight: MediaQuery
+                      .sizeOf(context)
+                      .height * 0.7,
+                  maxWidth: MediaQuery
+                      .sizeOf(context)
+                      .width,
+                  maxHeight: MediaQuery
+                      .sizeOf(context)
+                      .height * 1,
                 ),
                 decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  color: ColorsUtil.secondaryBackground,
                 ),
                 alignment: AlignmentDirectional(0, 0),
                 child: Column(
