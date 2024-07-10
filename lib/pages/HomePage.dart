@@ -34,6 +34,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     super.initState();
     _model = createModel(context, () => HomePageModel());
     _settingsStorage = Settingstorage();
+    _settingsStorage.loadSettings();
   }
 
   @override

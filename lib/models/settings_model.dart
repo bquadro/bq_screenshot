@@ -9,20 +9,20 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
 
   final unfocusNode = FocusNode();
   // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode1;
-  TextEditingController? textController1;
+  FocusNode? s3EndpointFocusNode;
+  TextEditingController? s3Endpoint;
   String? Function(BuildContext, String?)? textController1Validator;
   // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode2;
-  TextEditingController? textController2;
+  FocusNode? s3AccessKeyFocusNode;
+  TextEditingController? s3AccessKey;
   String? Function(BuildContext, String?)? textController2Validator;
   // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode3;
-  TextEditingController? textController3;
+  FocusNode? s3SecretKeyFocusNode;
+  TextEditingController? s3SecretKey;
   String? Function(BuildContext, String?)? textController3Validator;
   // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode4;
-  TextEditingController? textController4;
+  FocusNode? saveDirectoryPathFocusNode;
+  TextEditingController? saveDirectoryPath;
   String? Function(BuildContext, String?)? textController4Validator;
 
   @override
@@ -31,16 +31,16 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
   @override
   void dispose() {
     unfocusNode.dispose();
-    textFieldFocusNode1?.dispose();
-    textController1?.dispose();
+    s3EndpointFocusNode?.dispose();
+    s3Endpoint?.dispose();
 
-    textFieldFocusNode2?.dispose();
-    textController2?.dispose();
+    s3AccessKeyFocusNode?.dispose();
+    s3AccessKey?.dispose();
 
-    textFieldFocusNode3?.dispose();
-    textController3?.dispose();
+    s3SecretKeyFocusNode?.dispose();
+    s3SecretKey?.dispose();
 
-    textFieldFocusNode4?.dispose();
-    textController4?.dispose();
+    saveDirectoryPathFocusNode?.dispose();
+    saveDirectoryPath?.dispose();
   }
 }

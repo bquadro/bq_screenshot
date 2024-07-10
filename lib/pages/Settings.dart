@@ -1,8 +1,7 @@
 import 'package:bq_screenshot/utils/ColorsUtil.dart';
+import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import '../models/settings_model.dart';
 export '../models/homepage_model.dart';
@@ -17,6 +16,8 @@ class SettingsWidget extends StatefulWidget {
 class _SettingsWidgetState extends State<SettingsWidget> {
   late SettingsModel _model;
 
+  late Settingstorage _settingsStorage;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -24,17 +25,20 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     super.initState();
     _model = createModel(context, () => SettingsModel());
 
-    _model.textController1 ??= TextEditingController();
-    _model.textFieldFocusNode1 ??= FocusNode();
+    _model.s3Endpoint ??= TextEditingController();
+    _model.s3EndpointFocusNode ??= FocusNode();
 
-    _model.textController2 ??= TextEditingController();
-    _model.textFieldFocusNode2 ??= FocusNode();
+    _model.s3AccessKey ??= TextEditingController();
+    _model.s3AccessKeyFocusNode ??= FocusNode();
 
-    _model.textController3 ??= TextEditingController();
-    _model.textFieldFocusNode3 ??= FocusNode();
+    _model.s3SecretKey ??= TextEditingController();
+    _model.s3SecretKeyFocusNode ??= FocusNode();
 
-    _model.textController4 ??= TextEditingController();
-    _model.textFieldFocusNode4 ??= FocusNode();
+    _model.saveDirectoryPath ??= TextEditingController();
+    _model.saveDirectoryPathFocusNode ??= FocusNode();
+
+    _settingsStorage = Settingstorage();
+    loadSettings();
   }
 
   @override
@@ -68,7 +72,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           actions: [
             FFButtonWidget(
               onPressed: () {
-                print('Button pressed ...');
+                _settingsStorage.saveSettings();
                 Navigator.pop(context);
               },
               text: 'Сохранить',
@@ -146,8 +150,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 8, 10),
                                   child: TextFormField(
-                                    controller: _model.textController1,
-                                    focusNode: _model.textFieldFocusNode1,
+                                    controller: _model.s3Endpoint,
+                                    focusNode: _model.s3EndpointFocusNode,
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -195,6 +199,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     ),
                                     validator: _model.textController1Validator
                                         .asValidator(context),
+                                    onChanged: (text) {
+                                      _settingsStorage?.Settings.s3_endPoint =
+                                          text;
+                                    },
                                   ),
                                 ),
                               ),
@@ -204,8 +212,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 8, 10),
                                   child: TextFormField(
-                                    controller: _model.textController2,
-                                    focusNode: _model.textFieldFocusNode2,
+                                    controller: _model.s3AccessKey,
+                                    focusNode: _model.s3AccessKeyFocusNode,
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -253,6 +261,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     ),
                                     validator: _model.textController2Validator
                                         .asValidator(context),
+                                    onChanged: (text) {
+                                      _settingsStorage?.Settings.s3_accessKey =
+                                          text;
+                                    },
                                   ),
                                 ),
                               ),
@@ -262,8 +274,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8, 0, 8, 10),
                                   child: TextFormField(
-                                    controller: _model.textController3,
-                                    focusNode: _model.textFieldFocusNode3,
+                                    controller: _model.s3SecretKey,
+                                    focusNode: _model.s3SecretKeyFocusNode,
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -311,6 +323,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     ),
                                     validator: _model.textController3Validator
                                         .asValidator(context),
+                                    onChanged: (text) {
+                                      _settingsStorage?.Settings.s3_secretKey =
+                                          text;
+                                    },
                                   ),
                                 ),
                               ),
@@ -353,8 +369,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8, 0, 10, 0),
                                       child: TextFormField(
-                                        controller: _model.textController4,
-                                        focusNode: _model.textFieldFocusNode4,
+                                        controller: _model.saveDirectoryPath,
+                                        focusNode:
+                                            _model.saveDirectoryPathFocusNode,
                                         autofocus: true,
                                         obscureText: false,
                                         decoration: InputDecoration(
@@ -408,6 +425,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                         validator: _model
                                             .textController4Validator
                                             .asValidator(context),
+                                        onChanged: (text) {
+                                          _settingsStorage?.Settings
+                                              .saveDirectoryPath = text;
+                                        },
                                       ),
                                     ),
                                   ),
@@ -463,5 +484,17 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> loadSettings() async {
+    Settingstorage data = await _settingsStorage.loadSettings();
+    _model.s3Endpoint.text = data.Settings.s3_endPoint;
+    _model.s3AccessKey.text = data.Settings.s3_accessKey;
+    _model.s3SecretKey.text = data.Settings.s3_secretKey;
+    _model.saveDirectoryPath.text =
+        data.Settings.saveDirectoryPath.isEmpty == false
+            ? data.Settings.saveDirectoryPath
+            : await _settingsStorage.getDefaultSaveDirectoryPath();
+    setState(() {});
   }
 }
