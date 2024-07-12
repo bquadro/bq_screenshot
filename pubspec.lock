@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.7"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.1"
   async:
     dependency: transitive
     description:
@@ -185,6 +193,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.15"
+  device_info_plus:
+    dependency: transitive
+    description:
+      name: device_info_plus
+      sha256: eead12d1a1ed83d8283ab4c2f3fca23ac4082f29f25f29dff0f758f57d06ec91
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.1.0"
+  device_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_plus_platform_interface
+      sha256: d3b01d5868b50ae571cd1dc6e502fc94d956b665756180f7b16ead09e836fd64
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   dropdown_button2:
     dependency: transitive
     description:
@@ -209,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  emoji_picker_flutter:
+    dependency: transitive
+    description:
+      name: emoji_picker_flutter
+      sha256: "839200a2bd1af9a65d71133a5a246dbf5b24f7e4f6f4c5390130c2e0ed5f85af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   equatable:
     dependency: transitive
     description:
@@ -496,6 +528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      sha256: "2237616a36c0d69aef7549ab439b833fb7f9fb9fc861af2cc9ac3eedddd69ca8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   intl:
     dependency: "direct main"
     description:
@@ -817,6 +857,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.2"
+  pro_image_editor:
+    dependency: "direct main"
+    description:
+      name: pro_image_editor
+      sha256: "8cb031f0ab33352ba4b78a93833f54e56b34c3e8e1fd2e287fbdc2f8475689ae"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.7"
   provider:
     dependency: "direct main"
     description:
@@ -1206,6 +1254,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  vibration:
+    dependency: transitive
+    description:
+      name: vibration
+      sha256: "06588a845a4ebc73ab7ff7da555c2b3dbcd9676164b5856a38bf0b2287f1045d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.0"
+  vibration_platform_interface:
+    dependency: transitive
+    description:
+      name: vibration_platform_interface
+      sha256: "735a5fef0f284de0ad9449a5ed7d36ba017c6f59b5b20ac64418af4a6bd35ee7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   vm_service:
     dependency: transitive
     description:
@@ -1270,6 +1334,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.5.1"
+  win32_registry:
+    dependency: transitive
+    description:
+      name: win32_registry
+      sha256: "10589e0d7f4e053f2c61023a31c9ce01146656a70b7b7f0828c0b46d7da2a9bb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.3"
   xdg_directories:
     dependency: transitive
     description:

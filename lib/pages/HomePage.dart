@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:bq_screenshot/pages/Settings.dart';
-import 'package:bq_screenshot/utils/ColorsUtil.dart';
-import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +8,13 @@ import 'package:minio/minio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:pasteboard/pasteboard.dart';
+import 'package:pro_image_editor/pro_image_editor.dart';
+
+import 'package:bq_screenshot/pages/Settings.dart';
+import 'package:bq_screenshot/utils/ColorsUtil.dart';
+import 'package:bq_screenshot/utils/SettingsStorage.dart';
+import 'package:bq_screenshot/utils/EditorEvents.dart';
+
 
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
@@ -22,7 +26,7 @@ class HomePageWidget extends StatefulWidget {
   State<HomePageWidget> createState() => _HomePageWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> {
+class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<HomePageWidget> {
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -241,7 +245,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           // OpenSettings
 
                           print('Open Settings');
+                          print(_lastCapturedData!.imagePath);
 
+                          File file = File(_lastCapturedData!.imagePath!);
+                          await precacheImage(FileImage(file), context);
+                          if (!context.mounted) return;
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => _buildFileEditor(file)),
+                          );
 
                         },
                         text: 'Скопировать картинку',
@@ -252,7 +264,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         options: FFButtonOptions(
                           height: 40,
                           padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           color: ColorsUtil.success,
                           textStyle: TextStyle(
                             fontFamily: 'Readex Pro',
@@ -321,5 +334,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 "https://${_settings.Settings.s3_endPoint}/${_settings.Settings.s3_bucket}/$fileName"));
       }
     }
+  }
+
+  Widget _buildFileEditor(File file) {
+    return ProImageEditor.file(
+      file,
+      callbacks: ProImageEditorCallbacks(
+        onImageEditingStarted: onImageEditingStarted,
+        onImageEditingComplete: onImageEditingComplete,
+        onCloseEditor: onCloseEditor,
+      ),
+      configs: ProImageEditorConfigs(
+        designMode: platformDesignMode,
+      ),
+    );
   }
 }

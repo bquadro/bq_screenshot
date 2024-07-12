@@ -1,10 +1,16 @@
 PODS:
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
+  - emoji_picker_flutter (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - FMDB (2.7.12):
     - FMDB/standard (= 2.7.12)
   - FMDB/Core (2.7.12)
   - FMDB/standard (2.7.12):
     - FMDB/Core
+  - pasteboard (0.0.1):
+    - FlutterMacOS
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -22,7 +28,10 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
+  - emoji_picker_flutter (from `Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - pasteboard (from `Flutter/ephemeral/.symlinks/plugins/pasteboard/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - rive_common (from `Flutter/ephemeral/.symlinks/plugins/rive_common/macos`)
   - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
@@ -35,8 +44,14 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
+  emoji_picker_flutter:
+    :path: Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  pasteboard:
+    :path: Flutter/ephemeral/.symlinks/plugins/pasteboard/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   rive_common:
@@ -51,8 +66,11 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
+  device_info_plus: ce1b7762849d3ec103d0e0517299f2db7ad60720
+  emoji_picker_flutter: 533634326b1c5de9a181ba14b9758e6dfe967a20
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
+  pasteboard: 9b69dba6fedbb04866be632205d532fe2f6b1d99
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   rive_common: 0f0aadf670f0c6a7872dfe3e6186f112a5319108
   screen_capturer_macos: e91a66e1eeefd5e4fe068bb1bffc053cc34b63b8

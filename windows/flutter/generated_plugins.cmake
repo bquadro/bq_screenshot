@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  emoji_picker_flutter
   pasteboard
   rive_common
   screen_capturer_windows
