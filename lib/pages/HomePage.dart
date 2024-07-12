@@ -10,6 +10,7 @@ import 'package:minio/io.dart';
 import 'package:minio/minio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
+import 'package:pasteboard/pasteboard.dart';
 
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
@@ -233,6 +234,37 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               fit: BoxFit.cover,
                             ),
                           ),
+                        ),
+                      ),
+                      FFButtonWidget(
+                        onPressed: () async {
+                          // OpenSettings
+
+                          print('Open Settings');
+
+
+                        },
+                        text: 'Скопировать картинку',
+                        icon: Icon(
+                          Icons.copy,
+                          size: 15,
+                        ),
+                        options: FFButtonOptions(
+                          height: 40,
+                          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          color: ColorsUtil.success,
+                          textStyle: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            color: Colors.white,
+                            letterSpacing: 0,
+                          ),
+                          elevation: 3,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                     ],
