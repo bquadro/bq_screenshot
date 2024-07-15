@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:minio/io.dart';
 import 'package:minio/minio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
@@ -14,7 +14,6 @@ import 'package:bq_screenshot/pages/Settings.dart';
 import 'package:bq_screenshot/utils/ColorsUtil.dart';
 import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:bq_screenshot/utils/EditorEvents.dart';
-
 
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
@@ -26,13 +25,13 @@ class HomePageWidget extends StatefulWidget {
   State<HomePageWidget> createState() => _HomePageWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<HomePageWidget> {
+class _HomePageWidgetState extends State<HomePageWidget>
+    with EditorEventsState<HomePageWidget> {
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   CapturedData? _lastCapturedData;
-  Uint8List? _imageBytesFromClipboard;
 
   var _settingsStorage;
 
@@ -47,7 +46,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -168,7 +166,6 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
               child: FFButtonWidget(
                 onPressed: () async {
                   // OpenSettings
-
                   print('Open Settings');
                   Navigator.push(
                       context,
@@ -203,100 +200,18 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
           centerTitle: false,
           elevation: 2,
         ),
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (_lastCapturedData != null &&
-                  _lastCapturedData?.imagePath != null)
-                Container(
-                  width: 100,
-                  height: 0,
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.sizeOf(context).width,
-                    minHeight: MediaQuery.sizeOf(context).height * 0.7,
-                    maxWidth: MediaQuery.sizeOf(context).width,
-                    maxHeight: MediaQuery.sizeOf(context).height * 1,
-                  ),
-                  decoration: BoxDecoration(
-                    color: ColorsUtil.secondaryBackground,
-                  ),
-                  alignment: AlignmentDirectional(0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.file(
-                              File(_lastCapturedData!.imagePath!),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      FFButtonWidget(
-                        onPressed: () async {
-                          // OpenSettings
-
-                          print('Open Settings');
-                          print(_lastCapturedData!.imagePath);
-
-                          File file = File(_lastCapturedData!.imagePath!);
-                          await precacheImage(FileImage(file), context);
-                          if (!context.mounted) return;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => _buildFileEditor(file)),
-                          );
-
-                        },
-                        text: 'Скопировать картинку',
-                        icon: Icon(
-                          Icons.copy,
-                          size: 15,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40,
-                          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-                          iconPadding:
-                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                          color: ColorsUtil.success,
-                          textStyle: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            color: Colors.white,
-                            letterSpacing: 0,
-                          ),
-                          elevation: 3,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
   Future<void> _handleClickCapture(CaptureMode mode) async {
-    Settingstorage _settings = await Settingstorage().loadSettings();
+    Settingstorage settings = await Settingstorage().loadSettings();
 
-    String imageName =
+    Settingstorage.ImageName =
         'Screenshot-${DateTime.now().millisecondsSinceEpoch}.png';
 
-    String imagePath = '${_settings.Settings.saveDirectoryPath}/$imageName';
+    String imagePath =
+        '${settings.Settings.saveDirectoryPath}/${Settingstorage.ImageName}';
 
     _lastCapturedData = await screenCapturer.capture(
       mode: mode,
@@ -306,8 +221,12 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
     );
 
     if (_lastCapturedData != null) {
-      print('Screenshot Complete');
-      await uploadToS3(imageName, imagePath);
+      File file = File(_lastCapturedData!.imagePath!);
+      await precacheImage(FileImage(file), context);
+      if (!context.mounted) return;
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => _buildFileEditor(file)),
+      );
     } else {
       // ignore: avoid_print
       print('User canceled capture');
@@ -315,28 +234,8 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
     setState(() {});
   }
 
-  Future<void> uploadToS3(String fileName, String filePath) async {
-    Settingstorage _settings = await Settingstorage().loadSettings();
-    if (_settings.Settings.s3_endPoint.isNotEmpty &&
-        _settings.Settings.s3_secretKey.isNotEmpty &&
-        _settings.Settings.s3_accessKey.isNotEmpty &&
-        _settings.Settings.s3_bucket.isNotEmpty) {
-      final minio = Minio(
-        endPoint: _settings.Settings.s3_endPoint,
-        accessKey: _settings.Settings.s3_accessKey,
-        secretKey: _settings.Settings.s3_secretKey,
-      );
-      var result = await minio.fPutObject(
-          _settings.Settings.s3_bucket, fileName, filePath);
-      if (result.isNotEmpty) {
-        Clipboard.setData(ClipboardData(
-            text:
-                "https://${_settings.Settings.s3_endPoint}/${_settings.Settings.s3_bucket}/$fileName"));
-      }
-    }
-  }
-
   Widget _buildFileEditor(File file) {
+    setRawImagePath(_lastCapturedData?.imagePath);
     return ProImageEditor.file(
       file,
       callbacks: ProImageEditorCallbacks(
@@ -345,8 +244,99 @@ class _HomePageWidgetState extends State<HomePageWidget> with EditorEventsState<
         onCloseEditor: onCloseEditor,
       ),
       configs: ProImageEditorConfigs(
-        designMode: platformDesignMode,
-      ),
+          designMode: platformDesignMode,
+          customWidgets: ImageEditorCustomWidgets(
+            mainEditor: CustomWidgetsMainEditor(
+              appBar: (editor, rebuildStream) => editor.selectedLayerIndex < 0
+                  ? ReactiveCustomAppbar(
+                      stream: rebuildStream,
+                      builder: (_) =>
+                          _buildAppBar(editor, _lastCapturedData?.imagePath))
+                  : null,
+            ),
+          )),
+    );
+  }
+
+  AppBar _buildAppBar(ProImageEditorState editor, String? imagePath) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      foregroundColor: Colors.white,
+      backgroundColor: Colors.black,
+      actions: [
+        IconButton(
+          tooltip: 'Сохранить',
+          color: Colors.amber,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          icon: const Icon(
+            Icons.save,
+            color: Colors.amber,
+          ),
+          onPressed: () async {
+            if (imagePath != null) {
+              File file = File(imagePath);
+              Uint8List? bytes = await editor.captureEditorImage();
+              file.writeAsBytesSync(bytes);
+              await uploadToS3(Settingstorage.ImageName, imagePath!);
+            }
+          },
+        ),
+        IconButton(
+          tooltip: 'Копировать',
+          color: Colors.amber,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          icon: const Icon(
+            Icons.copy,
+            color: Colors.amber,
+          ),
+          onPressed: () async {
+            if (imagePath != null) {
+              File file = File(imagePath);
+              Uint8List? bytes = await editor.captureEditorImage();
+              file.writeAsBytesSync(bytes);
+              await Pasteboard.writeFiles([imagePath]);
+            }
+          },
+        ),
+        const Spacer(),
+        IconButton(
+          tooltip: 'Undo',
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          icon: Icon(
+            Icons.undo,
+            color: editor.canUndo == true
+                ? Colors.white
+                : Colors.white.withAlpha(80),
+          ),
+          onPressed: editor.undoAction,
+        ),
+        IconButton(
+          tooltip: 'Redo',
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          icon: Icon(
+            Icons.redo,
+            color: editor.canRedo == true
+                ? Colors.white
+                : Colors.white.withAlpha(80),
+          ),
+          onPressed: editor.redoAction,
+        ),
+        IconButton(
+          tooltip: 'Done',
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          icon: const Icon(Icons.done),
+          iconSize: 28,
+          onPressed: () async {
+            if (imagePath != null) {
+              File file = File(imagePath);
+              Uint8List? bytes = await editor.captureEditorImage();
+              file.writeAsBytesSync(bytes);
+              await uploadToS3(Settingstorage.ImageName, imagePath!);
+            }
+            editor.doneEditing();
+          },
+        ),
+      ],
     );
   }
 }

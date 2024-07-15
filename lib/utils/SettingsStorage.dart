@@ -37,7 +37,7 @@ class SettingsstorageData {
 
   Future<String> getDefaultSaveDirectoryPath() async {
     final directory = await getApplicationDocumentsDirectory();
-    return "${directory.path}/Screenshots/";
+    return "${directory.path}/Screenshots";
   }
 }
 
@@ -45,6 +45,8 @@ class Settingstorage {
   late SettingsstorageData Settings;
 
   static const String configFileName = "config.json";
+
+  static String ImageName='';
 
   Settingstorage() {
     Settings = SettingsstorageData();
