@@ -70,6 +70,7 @@ dependencies:
   intl: ^0.19.0
   pasteboard: ^0.2.0
   pro_image_editor: ^4.2.7
+  hotkey_manager: ^0.2.3
 
 dev_dependencies:
   lints: 4.0.0
