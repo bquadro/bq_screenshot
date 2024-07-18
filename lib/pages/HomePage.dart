@@ -1,14 +1,13 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:minio/io.dart';
-import 'package:minio/minio.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
+import 'package:flutter/services.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 
 import 'package:bq_screenshot/pages/Settings.dart';
 import 'package:bq_screenshot/utils/ColorsUtil.dart';
@@ -41,12 +40,47 @@ class _HomePageWidgetState extends State<HomePageWidget>
     _model = createModel(context, () => HomePageModel());
     _settingsStorage = Settingstorage();
     _settingsStorage.loadSettings();
+    registerHotKeys();
   }
 
   @override
-  void dispose() {
+  void dispose() async {
+    await hotKeyManager.unregisterAll();
     _model.dispose();
     super.dispose();
+  }
+
+  void registerHotKeys() async {
+    HotKey _hotKeyArea = HotKey(
+      key: PhysicalKeyboardKey.digit4,
+      modifiers: [HotKeyModifier.alt],
+      // Set hotkey scope (default is HotKeyScope.system)
+      scope: HotKeyScope.inapp, // Set as inapp-wide hotkey.
+    );
+
+    HotKey _hotKeyWindow = HotKey(
+      key: PhysicalKeyboardKey.digit5,
+      modifiers: [HotKeyModifier.alt],
+      // Set hotkey scope (default is HotKeyScope.system)
+      scope: HotKeyScope.inapp, // Set as inapp-wide hotkey.
+    );
+
+    HotKey _hotKeyScreen = HotKey(
+      key: PhysicalKeyboardKey.digit6,
+      modifiers: [HotKeyModifier.alt],
+      // Set hotkey scope (default is HotKeyScope.system)
+      scope: HotKeyScope.inapp, // Set as inapp-wide hotkey.
+    );
+
+    await hotKeyManager.register(_hotKeyArea, keyDownHandler: (hotKey) {
+      _handleClickCapture(CaptureMode.region);
+    });
+    await hotKeyManager.register(_hotKeyWindow, keyDownHandler: (hotKey) {
+      _handleClickCapture(CaptureMode.window);
+    });
+    await hotKeyManager.register(_hotKeyScreen, keyDownHandler: (hotKey) {
+      _handleClickCapture(CaptureMode.screen);
+    });
   }
 
   @override
@@ -265,11 +299,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
       backgroundColor: Colors.black,
       actions: [
         IconButton(
-          tooltip: 'Сохранить',
+          tooltip: 'Поделиться',
           color: Colors.amber,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           icon: const Icon(
-            Icons.save,
+            Icons.share,
             color: Colors.amber,
           ),
           onPressed: () async {
