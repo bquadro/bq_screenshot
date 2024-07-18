@@ -72,6 +72,7 @@ dependencies:
   pro_image_editor: ^4.2.7
   hotkey_manager: ^0.2.3
   file_picker: ^8.0.6
+  tray_manager: ^0.2.3
 
 dev_dependencies:
   lints: 4.0.0
