@@ -2,6 +2,7 @@ import 'package:bq_screenshot/utils/ColorsUtil.dart';
 import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../models/settings_model.dart';
 export '../models/homepage_model.dart';
@@ -501,8 +502,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       FFButtonWidget(
-                                        onPressed: () {
-                                          print('Button pressed ...');
+                                        onPressed: () async {
+                                          String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+                                          if (selectedDirectory != null) {
+                                            _settingsStorage?.Settings
+                                                .saveDirectoryPath = selectedDirectory;
+                                            _model.saveDirectoryPath.text = selectedDirectory;
+                                            setState(() {});
+                                          }
                                         },
                                         text: 'Выбрать',
                                         icon: Icon(
