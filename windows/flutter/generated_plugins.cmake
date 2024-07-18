@@ -8,8 +8,10 @@ list(APPEND FLUTTER_PLUGIN_LIST
   pasteboard
   rive_common
   screen_capturer_windows
+  screen_retriever
   tray_manager
   url_launcher_windows
+  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

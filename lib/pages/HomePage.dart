@@ -14,6 +14,9 @@ import 'package:bq_screenshot/utils/ColorsUtil.dart';
 import 'package:bq_screenshot/utils/SettingsStorage.dart';
 import 'package:bq_screenshot/utils/EditorEvents.dart';
 
+import 'package:flutter/material.dart' hide MenuItem;
+import 'package:tray_manager/tray_manager.dart';
+
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
 
@@ -25,7 +28,7 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget>
-    with EditorEventsState<HomePageWidget> {
+    with EditorEventsState<HomePageWidget>, TrayListener {
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -41,13 +44,45 @@ class _HomePageWidgetState extends State<HomePageWidget>
     _settingsStorage = Settingstorage();
     _settingsStorage.loadSettings();
     registerHotKeys();
+    trayManager.addListener(this);
+
+    initTray();
   }
 
   @override
   void dispose() async {
     await hotKeyManager.unregisterAll();
+    trayManager.removeListener(this);
     _model.dispose();
     super.dispose();
+  }
+
+  void initTray() async {
+    await trayManager.setIcon(
+      Platform.isWindows ? 'images/tray_icon.ico' : 'images/tray_icon.png',
+    );
+    Menu menu = Menu(
+      items: [
+        MenuItem(
+            key: 'show_window',
+            label: 'Show Window',
+            onClick: (menuItem) {
+
+            }),
+        MenuItem(
+            key: 'hide_window',
+            label: 'Hide Window',
+            onClick: (menuItem) {
+             
+            }),
+        MenuItem.separator(),
+        MenuItem(
+          key: 'exit_app',
+          label: 'Exit App',
+        ),
+      ],
+    );
+    await trayManager.setContextMenu(menu);
   }
 
   void registerHotKeys() async {
@@ -372,5 +407,31 @@ class _HomePageWidgetState extends State<HomePageWidget>
         ),
       ],
     );
+  }
+
+  // События трея
+  @override
+  void onTrayIconMouseDown() {
+    // do something, for example pop up the menu
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    // do something
+  }
+
+  @override
+  void onTrayIconRightMouseUp() {
+    // do something
+  }
+
+  @override
+  void onTrayMenuItemClick(MenuItem menuItem) {
+    if (menuItem.key == 'show_window') {
+      // do something
+    } else if (menuItem.key == 'exit_app') {
+      // do something
+    }
   }
 }
