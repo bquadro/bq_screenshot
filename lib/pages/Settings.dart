@@ -204,7 +204,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     validator: _model.s3EndpointValidator
                                         .asValidator(context),
                                     onChanged: (text) {
-                                      _settingsStorage?.Settings.s3_endPoint =
+                                      _settingsStorage.Settings.s3_endPoint =
                                           text;
                                     },
                                   ),
@@ -266,7 +266,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     validator: _model.s3AccessKeyValidator
                                         .asValidator(context),
                                     onChanged: (text) {
-                                      _settingsStorage?.Settings.s3_accessKey =
+                                      _settingsStorage.Settings.s3_accessKey =
                                           text;
                                     },
                                   ),
@@ -328,7 +328,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     validator: _model.s3SecretKeyValidator
                                         .asValidator(context),
                                     onChanged: (text) {
-                                      _settingsStorage?.Settings.s3_secretKey =
+                                      _settingsStorage.Settings.s3_secretKey =
                                           text;
                                     },
                                   ),
@@ -390,7 +390,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     validator: _model.s3BucketValidator
                                         .asValidator(context),
                                     onChanged: (text) {
-                                      _settingsStorage?.Settings.s3_bucket =
+                                      _settingsStorage.Settings.s3_bucket =
                                           text;
                                     },
                                   ),
@@ -492,7 +492,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                             .saveDirectoryPathValidator
                                             .asValidator(context),
                                         onChanged: (text) {
-                                          _settingsStorage?.Settings
+                                          _settingsStorage.Settings
                                               .saveDirectoryPath = text;
                                         },
                                       ),
@@ -506,7 +506,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
                                           if (selectedDirectory != null) {
-                                            _settingsStorage?.Settings
+                                            _settingsStorage.Settings
                                                 .saveDirectoryPath = selectedDirectory;
                                             _model.saveDirectoryPath.text = selectedDirectory;
                                             setState(() {});

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
@@ -70,27 +71,31 @@ class _HomePageWidgetState extends State<HomePageWidget>
     await trayManager.setIcon(
       Platform.isWindows ? 'images/tray_icon.ico' : 'images/tray_icon.png',
     );
-    Menu menu = Menu(
-      items: [
-        MenuItem(
-          key: 'capture_area',
-          label: 'Область',
-        ),
-        MenuItem(
-          key: 'capture_window',
-          label: 'Окно',
-        ),
-        MenuItem(
-          key: 'capture_screen',
-          label: 'Экран',
-        ),
-        MenuItem.separator(),
-        MenuItem(
-          key: 'exit_app',
-          label: 'Exit App',
-        ),
-      ],
-    );
+
+    Menu menu = Menu(items: [
+      MenuItem(
+        key: 'window_hide',
+        label: 'Скрыть',
+      ),
+      MenuItem.separator(),
+      MenuItem(
+        key: 'capture_area',
+        label: 'Область',
+      ),
+      MenuItem(
+        key: 'capture_window',
+        label: 'Окно',
+      ),
+      MenuItem(
+        key: 'capture_screen',
+        label: 'Экран',
+      ),
+      MenuItem.separator(),
+      MenuItem(
+        key: 'exit_app',
+        label: 'Exit App',
+      ),
+    ]);
     await trayManager.setContextMenu(menu);
   }
 
@@ -358,7 +363,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
               File file = File(imagePath);
               Uint8List? bytes = await editor.captureEditorImage();
               file.writeAsBytesSync(bytes);
-              await uploadToS3(Settingstorage.ImageName, imagePath!);
+              await uploadToS3(Settingstorage.ImageName, imagePath);
             }
           },
         ),
@@ -412,7 +417,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
               File file = File(imagePath);
               Uint8List? bytes = await editor.captureEditorImage();
               file.writeAsBytesSync(bytes);
-              await uploadToS3(Settingstorage.ImageName, imagePath!);
+              await uploadToS3(Settingstorage.ImageName, imagePath);
             }
             editor.doneEditing();
           },
@@ -431,6 +436,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
   @override
   void onTrayMenuItemClick(MenuItem menuItem) {
     switch (menuItem.key) {
+      case 'window_show':
+        windowManager.show();
+        break;
+      case 'window_hide':
+        windowManager.hide();
+        break;
       case 'capture_area':
         _handleClickCapture(CaptureMode.region);
         break;
@@ -441,39 +452,23 @@ class _HomePageWidgetState extends State<HomePageWidget>
         _handleClickCapture(CaptureMode.screen);
         break;
       case 'exit_app':
-        windowManager.close();
+        windowManager.destroy();
         break;
     }
   }
 
-  /// Подтверждение закрытия приложения
+  @override
+  void onWindowFocus() {
+    // Make sure to call once.
+    setState(() {});
+    // do something
+  }
+
+  @override
   void onWindowClose() async {
-    print('test');
     bool _isPreventClose = await windowManager.isPreventClose();
     if (_isPreventClose) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text('Вы уверены, что хотите выйти?'),
-            actions: [
-              TextButton(
-                child: Text('Нет'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Да'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  await windowManager.destroy();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      windowManager.hide();
     }
   }
 }
