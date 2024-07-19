@@ -93,7 +93,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
       MenuItem.separator(),
       MenuItem(
         key: 'exit_app',
-        label: 'Exit App',
+        label: 'Выйти',
       ),
     ]);
     await trayManager.setContextMenu(menu);

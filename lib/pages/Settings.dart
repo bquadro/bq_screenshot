@@ -504,7 +504,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       FFButtonWidget(
                                         onPressed: () async {
                                           String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-
                                           if (selectedDirectory != null) {
                                             _settingsStorage.Settings
                                                 .saveDirectoryPath = selectedDirectory;
