@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
-import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
 import 'package:bq_screenshot/pages/Settings.dart';
@@ -16,6 +15,7 @@ import 'package:bq_screenshot/utils/EditorEvents.dart';
 
 import 'package:flutter/material.dart' hide MenuItem;
 import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../models/homepage_model.dart';
 export '../models/homepage_model.dart';
@@ -28,7 +28,7 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget>
-    with EditorEventsState<HomePageWidget>, TrayListener {
+    with EditorEventsState<HomePageWidget>, TrayListener, WindowListener {
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -45,14 +45,23 @@ class _HomePageWidgetState extends State<HomePageWidget>
     _settingsStorage.loadSettings();
     registerHotKeys();
     trayManager.addListener(this);
+    windowManager.addListener(this);
 
     initTray();
+    _init();
+  }
+
+  void _init() async {
+    // Add this line to override the default close handler
+    await windowManager.setPreventClose(true);
+    setState(() {});
   }
 
   @override
   void dispose() async {
     await hotKeyManager.unregisterAll();
     trayManager.removeListener(this);
+    windowManager.removeListener(this);
     _model.dispose();
     super.dispose();
   }
@@ -64,17 +73,17 @@ class _HomePageWidgetState extends State<HomePageWidget>
     Menu menu = Menu(
       items: [
         MenuItem(
-            key: 'show_window',
-            label: 'Show Window',
-            onClick: (menuItem) {
-
-            }),
+          key: 'capture_area',
+          label: 'Область',
+        ),
         MenuItem(
-            key: 'hide_window',
-            label: 'Hide Window',
-            onClick: (menuItem) {
-             
-            }),
+          key: 'capture_window',
+          label: 'Окно',
+        ),
+        MenuItem(
+          key: 'capture_screen',
+          label: 'Экран',
+        ),
         MenuItem.separator(),
         MenuItem(
           key: 'exit_app',
@@ -273,6 +282,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
     );
   }
 
+  /// Событие создания скриншота
   Future<void> _handleClickCapture(CaptureMode mode) async {
     Settingstorage settings = await Settingstorage().loadSettings();
 
@@ -303,6 +313,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
     setState(() {});
   }
 
+  /// Редктор
   Widget _buildFileEditor(File file) {
     setRawImagePath(_lastCapturedData?.imagePath);
     return ProImageEditor.file(
@@ -327,6 +338,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
     );
   }
 
+  /// Кастомный appBar для редактора
   AppBar _buildAppBar(ProImageEditorState editor, String? imagePath) {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -417,21 +429,51 @@ class _HomePageWidgetState extends State<HomePageWidget>
   }
 
   @override
-  void onTrayIconRightMouseDown() {
-    // do something
-  }
-
-  @override
-  void onTrayIconRightMouseUp() {
-    // do something
-  }
-
-  @override
   void onTrayMenuItemClick(MenuItem menuItem) {
-    if (menuItem.key == 'show_window') {
-      // do something
-    } else if (menuItem.key == 'exit_app') {
-      // do something
+    switch (menuItem.key) {
+      case 'capture_area':
+        _handleClickCapture(CaptureMode.region);
+        break;
+      case 'capture_window':
+        _handleClickCapture(CaptureMode.window);
+        break;
+      case 'capture_screen':
+        _handleClickCapture(CaptureMode.screen);
+        break;
+      case 'exit_app':
+        windowManager.close();
+        break;
+    }
+  }
+
+  /// Подтверждение закрытия приложения
+  void onWindowClose() async {
+    print('test');
+    bool _isPreventClose = await windowManager.isPreventClose();
+    if (_isPreventClose) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('Вы уверены, что хотите выйти?'),
+            actions: [
+              TextButton(
+                child: Text('Нет'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Да'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await windowManager.destroy();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }
