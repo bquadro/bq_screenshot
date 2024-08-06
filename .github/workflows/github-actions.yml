@@ -5,9 +5,12 @@ jobs:
   MacOS-Build-Actions:
     runs-on: macOS-latest
     steps:
-      - run: mkdir ~/development/
-      - run: wget https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.22.3-stable.zip
-      - run: unzip flutter_macos_3.22.3-stable.zip -d ~/development/ && rm flutter_macos_3.22.3-stable.zip
-#      - run: echo "export PATH=$HOME/development/flutter/bin:$PATH" >> ~/.zshenv && source ~/.zshrc
-      - uses: actions/checkout@v4
-      - run: ls -la
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+          flutter-version: 3.x
+      - run: flutter --version
+
