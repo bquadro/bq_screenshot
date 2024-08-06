@@ -11,10 +11,10 @@ jobs:
           uses: subosito/flutter-action@v2
           id: flutter-action
           with:
-            channel: stable
+            channel: master
         - run: flutter pub get
         - run: flutter pub upgrade
-        - run: flutter build macos
+        - run: flutter build macos --release --no-codesign
         - run: mkdir ~/dist/ && mv build/macos/Build/Products/Release/bq_screenshot.app ~/dist/
         - name: save Artifacts
           uses: actions/upload-artifact@v3
