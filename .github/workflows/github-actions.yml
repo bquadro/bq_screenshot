@@ -2,22 +2,33 @@ name: Build App
 run-name: Build App
 on: [push]
 jobs:
-  MacOS-Build-Actions:
-    runs-on: macos-latest
+#  MacOS-Build-Actions:
+#    runs-on: macos-latest
+#    steps:
+#        - name: Clone repository
+#          uses: actions/checkout@v4
+#        - name: Set up Flutter
+#          uses: subosito/flutter-action@v2
+#          id: flutter-action
+#          with:
+#            channel: stable
+#        - run: flutter pub get
+#        - run: flutter pub upgrade
+#        - run: flutter build macos --release
+#        - run: mkdir ~/dist/ && mv build/macos/Build/Products/Release/bq_screenshot.app ~/dist/
+#        - name: save Artifacts
+#          uses: actions/upload-artifact@v3
+#          with:
+#            name: BuildMacOS
+#            path: ~/dist
+
+  Windows-Build-Actions:
+    runs-on: windows-latest
     steps:
-        - name: Clone repository
-          uses: actions/checkout@v4
-        - name: Set up Flutter
-          uses: subosito/flutter-action@v2
-          id: flutter-action
-          with:
-            channel: stable
-        - run: flutter pub get
-        - run: flutter pub upgrade
-        - run: flutter build macos --release
-        - run: mkdir ~/dist/ && mv build/macos/Build/Products/Release/bq_screenshot.app ~/dist/
-        - name: save Artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: Build
-            path: ~/dist
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter build windows
