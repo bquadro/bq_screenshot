@@ -15,7 +15,6 @@ jobs:
         - run: flutter pub get
         - run: flutter pub upgrade
         - run: flutter build macos
-        - run: cd build/macos/Build/Products/Release/ && ls -la
         - run: mkdir ~/dist/ && mv build/macos/Build/Products/Release/bq_screenshot.app ~/dist/
         - name: save Artifacts
           uses: actions/upload-artifact@v3
