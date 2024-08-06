@@ -11,7 +11,7 @@ jobs:
           uses: subosito/flutter-action@v2
           id: flutter-action
           with:
-            channel: master
+            channel: stable
         - run: flutter pub get
         - run: flutter pub upgrade
         - run: flutter build macos --release --no-codesign
