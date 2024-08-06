@@ -31,4 +31,12 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter build windows
+      - run: flutter pub get
+      - run: flutter pub upgrade
+      - run: flutter build windows --release
+      - run: mkdir ~/dist/ && mv build\windows\x64\runner\Release\bq_screenshot.exe ~/dist/
+      - name: save Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: BuildWindows
+          path: ~/dist
