@@ -3,7 +3,7 @@ run-name: Build App
 on: [push]
 jobs:
   MacOS-Build-Actions:
-    runs-on: macos-latest-large
+    runs-on: macOS-latest
     steps:
       - run: mkdir ~/development/
       - run: wget https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.22.3-stable.zip
