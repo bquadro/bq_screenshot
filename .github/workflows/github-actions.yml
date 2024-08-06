@@ -13,10 +13,11 @@ jobs:
           with:
             channel: stable
         - run: flutter build macos
-        - run: mkdir ~/dist/ && zip ~/dist/BqScreenshot-${{steps.flutter-action.outputs.VERSION}}.zip build/macos/Build/Products/Release/bq_screenshot.app
-        - name: save Artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: Build
-            path: ~/dist
-        - run: ls -la ~/dist
+        - run: cd build/macos/Build/Products/Release/ && ls -la
+#        - run: mkdir ~/dist/ && zip ~/dist/BqScreenshot-${{steps.flutter-action.outputs.VERSION}}.zip build/macos/Build/Products/Release/bq_screenshot.app
+#        - name: save Artifacts
+#          uses: actions/upload-artifact@v3
+#          with:
+#            name: Build
+#            path: ~/dist
+#        - run: ls -la ~/dist
