@@ -12,12 +12,13 @@ jobs:
           id: flutter-action
           with:
             channel: stable
+        - run: flutter pub get
+        - run: flutter pub upgrade
         - run: flutter build macos
         - run: cd build/macos/Build/Products/Release/ && ls -la
-#        - run: mkdir ~/dist/ && zip ~/dist/BqScreenshot-${{steps.flutter-action.outputs.VERSION}}.zip build/macos/Build/Products/Release/bq_screenshot.app
-#        - name: save Artifacts
-#          uses: actions/upload-artifact@v3
-#          with:
-#            name: Build
-#            path: ~/dist
-#        - run: ls -la ~/dist
+        - run: mkdir ~/dist/ && mv build/macos/Build/Products/Release/bq_screenshot.app ~/dist/
+        - name: save Artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: Build
+            path: ~/dist
