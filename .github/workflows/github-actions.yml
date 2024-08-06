@@ -8,5 +8,5 @@ jobs:
       - run: mkdir ~/development/
       - run: wget https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.22.3-stable.zip
       - run: unzip flutter_macos_3.22.3-stable.zip -d ~/development/
-      - run: echo "export PATH=$HOME/development/flutter/bin:$PATH" >> ~/.zshenv && source ~/.zshrc
+#      - run: echo "export PATH=$HOME/development/flutter/bin:$PATH" >> ~/.zshenv && source ~/.zshrc
       - run: ls -ls
