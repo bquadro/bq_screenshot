@@ -3,14 +3,12 @@ run-name: Build App
 on: [push]
 jobs:
   MacOS-Build-Actions:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: master
-          flutter-version: 3.x
-      - run: flutter --version
-
+        - name: Clone repository
+          uses: actions/checkout@v4
+        - name: Set up Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: stable
+        - run: flutter build macos
