@@ -28,3 +28,8 @@ flutter run --release
 ## статья по созданию инсталлера 
 
 https://dev.to/hahouari/creating-easy-windows-installer-for-flutter-apps-using-inno-bundle-5df3
+
+## Сборка dmg пакета для MacOs
+
+в терминале в папке relese
+`hdiutil create -srcfolder bq_screenshot.app bq_screenshot.dmg`
