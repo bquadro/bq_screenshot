@@ -5,11 +5,11 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class SettingsstorageData {
-  late String saveDirectoryPath;
-  late String s3_endPoint;
-  late String s3_accessKey;
-  late String s3_secretKey;
-  late String s3_bucket;
+   String saveDirectoryPath = '';
+   String s3_endPoint= '';
+   String s3_accessKey= '';
+   String s3_secretKey= '';
+   String s3_bucket= '';
 
   toJson() async {
     return jsonEncode({
@@ -57,7 +57,7 @@ class Settingstorage {
     if (configExist) {
       File settingsFile = await getConfigFile();
       final contents = await settingsFile.readAsString();
-      await Settings.fromJson(contents);
+       Settings.fromJson(contents);
     }
     return this;
   }

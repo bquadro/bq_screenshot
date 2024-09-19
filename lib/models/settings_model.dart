@@ -1,6 +1,8 @@
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+// import 'package:flutterflow_ui/flutterflow_ui.dart';
 import '../pages/Settings.dart' show SettingsWidget;
 import 'package:flutter/material.dart';
+
+import 'flutter_flow_model.dart';
 
 class SettingsModel extends FlutterFlowModel<SettingsWidget> {
   ///  State fields for stateful widgets in this page.

@@ -6,7 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   hotkey_manager_windows
   pasteboard
-  rive_common
   screen_capturer_windows
   screen_retriever
   tray_manager

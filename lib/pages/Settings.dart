@@ -1,10 +1,14 @@
-import 'package:bq_screenshot/utils/ColorsUtil.dart';
-import 'package:bq_screenshot/utils/SettingsStorage.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+import '/utils/ColorsUtil.dart';
+import '/utils/SettingsStorage.dart';
+// import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '/models/flutter_flow_model.dart' as model;
+
+
 import '../models/settings_model.dart';
+import 'flutter_flow_button.dart';
 export '../models/homepage_model.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -24,7 +28,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingsModel());
+    _model = model.createModel(context, () => SettingsModel());
 
     _model.s3Endpoint ??= TextEditingController();
     _model.s3EndpointFocusNode ??= FocusNode();
@@ -201,8 +205,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.s3EndpointValidator
-                                        .asValidator(context),
+                                    // validator: _model.s3EndpointValidator
+                                    //     ?.asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage.Settings.s3_endPoint =
                                           text;
@@ -263,8 +267,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.s3AccessKeyValidator
-                                        .asValidator(context),
+                                    // validator: _model.s3AccessKeyValidator
+                                    //     ?.asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage.Settings.s3_accessKey =
                                           text;
@@ -325,8 +329,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.s3SecretKeyValidator
-                                        .asValidator(context),
+                                    // validator: _model.s3SecretKeyValidator
+                                    //     ?.asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage.Settings.s3_secretKey =
                                           text;
@@ -387,8 +391,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0,
                                     ),
-                                    validator: _model.s3BucketValidator
-                                        .asValidator(context),
+                                    // validator: _model.s3BucketValidator
+                                    //     ?.asValidator(context),
                                     onChanged: (text) {
                                       _settingsStorage.Settings.s3_bucket =
                                           text;
@@ -488,9 +492,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           fontFamily: 'Readex Pro',
                                           letterSpacing: 0,
                                         ),
-                                        validator: _model
-                                            .saveDirectoryPathValidator
-                                            .asValidator(context),
+                                        // validator: _model
+                                        //     .saveDirectoryPathValidator
+                                        //     ?.asValidator(context),
                                         onChanged: (text) {
                                           _settingsStorage.Settings
                                               .saveDirectoryPath = text;
@@ -507,7 +511,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                           if (selectedDirectory != null) {
                                             _settingsStorage.Settings
                                                 .saveDirectoryPath = selectedDirectory;
-                                            _model.saveDirectoryPath.text = selectedDirectory;
+                                            _model.saveDirectoryPath?.text = selectedDirectory;
                                             setState(() {});
                                           }
                                         },
@@ -560,11 +564,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   Future<void> loadSettings() async {
     Settingstorage data = await _settingsStorage.loadSettings();
-    _model.s3Endpoint.text = data.Settings.s3_endPoint;
-    _model.s3AccessKey.text = data.Settings.s3_accessKey;
-    _model.s3SecretKey.text = data.Settings.s3_secretKey;
-    _model.s3Bucket.text = data.Settings.s3_bucket;
-    _model.saveDirectoryPath.text = data.Settings.saveDirectoryPath;
+    _model.s3Endpoint?.text = data.Settings.s3_endPoint;
+    _model.s3AccessKey?.text = data.Settings.s3_accessKey;
+    _model.s3SecretKey?.text = data.Settings.s3_secretKey;
+    _model.s3Bucket?.text = data.Settings.s3_bucket;
+    _model.saveDirectoryPath?.text = data.Settings.saveDirectoryPath;
     setState(() {});
   }
 }

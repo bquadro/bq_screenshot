@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:minio/io.dart';
 import 'package:minio/minio.dart';
+// import 'package:minio/io.dart';
+// import 'package:minio/minio.dart';
 
 // Package imports:
 import 'package:pro_image_editor/pro_image_editor.dart';
@@ -27,6 +29,7 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> onImageEditingComplete(bytes) async {
+
     editedBytes = bytes;
     setGenerationTime();
   }
@@ -45,11 +48,14 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
   }
 
   void onCloseEditor({
+
     bool showThumbnail = false,
     ui.Image? rawOriginalImage,
     final ImageGeneratioConfigs? generatioConfigs,
   }) async {
+
     if (editedBytes != null) {
+
       await precacheImage(MemoryImage(editedBytes!), context);
       if (!mounted) return;
       editorKey.currentState?.disablePopScope = true;

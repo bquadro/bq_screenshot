@@ -13,8 +13,6 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - rive_common (0.0.1):
-    - FlutterMacOS
   - screen_capturer_macos (0.0.1):
     - FlutterMacOS
   - screen_retriever (0.0.1):
@@ -39,7 +37,6 @@ DEPENDENCIES:
   - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
   - pasteboard (from `Flutter/ephemeral/.symlinks/plugins/pasteboard/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
-  - rive_common (from `Flutter/ephemeral/.symlinks/plugins/rive_common/macos`)
   - screen_capturer_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -65,8 +62,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/pasteboard/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
-  rive_common:
-    :path: Flutter/ephemeral/.symlinks/plugins/rive_common/macos
   screen_capturer_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_capturer_macos/macos
   screen_retriever:
@@ -90,7 +85,6 @@ SPEC CHECKSUMS:
   hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160
   pasteboard: 9b69dba6fedbb04866be632205d532fe2f6b1d99
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  rive_common: 0f0aadf670f0c6a7872dfe3e6186f112a5319108
   screen_capturer_macos: e91a66e1eeefd5e4fe068bb1bffc053cc34b63b8
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
