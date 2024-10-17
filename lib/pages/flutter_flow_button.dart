@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bq_screenshot/main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class FFButtonOptions {
   const FFButtonOptions({
@@ -163,7 +165,8 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
                 setState(() => loading = true);
                 try {
                   await widget.onPressed!();
-                } finally {
+                }
+                finally {
                   if (mounted) {
                     setState(() => loading = false);
                   }

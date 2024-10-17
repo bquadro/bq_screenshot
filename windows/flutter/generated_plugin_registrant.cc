@@ -11,6 +11,8 @@
 #include <pasteboard/pasteboard_plugin.h>
 #include <screen_capturer_windows/screen_capturer_windows_plugin_c_api.h>
 #include <screen_retriever/screen_retriever_plugin.h>
+#include <share_plus/share_plus_windows_plugin_c_api.h>
+#include <system_tray/system_tray_plugin.h>
 #include <tray_manager/tray_manager_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
 #include <window_manager/window_manager_plugin.h>
@@ -26,6 +28,10 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("ScreenCapturerWindowsPluginCApi"));
   ScreenRetrieverPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
+  SharePlusWindowsPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("SharePlusWindowsPluginCApi"));
+  SystemTrayPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("SystemTrayPlugin"));
   TrayManagerPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("TrayManagerPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(

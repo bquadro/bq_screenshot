@@ -5,19 +5,28 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class SettingsstorageData {
-   String saveDirectoryPath = '';
-   String s3_endPoint= '';
-   String s3_accessKey= '';
-   String s3_secretKey= '';
-   String s3_bucket= '';
+  String saveDirectoryPath = '';
+  String s3_endPoint = '';
+  String s3_accessKey = '';
+  String s3_secretKey = '';
+  String s3_bucket = '';
+
+  String hotKeyArea = '';
+  String hotKeyWindow = '';
+  String hotKeyScreen = '';
 
   toJson() async {
     return jsonEncode({
-      "saveDirectoryPath": saveDirectoryPath.isNotEmpty? saveDirectoryPath : await getDefaultSaveDirectoryPath(),
+      "saveDirectoryPath": saveDirectoryPath.isNotEmpty
+          ? saveDirectoryPath
+          : await getDefaultSaveDirectoryPath(),
       "s3_endPoint": s3_endPoint,
       "s3_accessKey": s3_accessKey,
       "s3_secretKey": s3_secretKey,
       "s3_bucket": s3_bucket,
+      "hotKeyArea": hotKeyArea,
+      "hotKeyWindow": hotKeyWindow,
+      "hotKeyScreen": hotKeyScreen,
     });
   }
 
@@ -25,13 +34,16 @@ class SettingsstorageData {
     if (json.isEmpty == false) {
       Map parse = jsonDecode(json);
       saveDirectoryPath = parse['saveDirectoryPath'];
-      if(saveDirectoryPath.isEmpty){
+      if (saveDirectoryPath.isEmpty) {
         saveDirectoryPath = await getDefaultSaveDirectoryPath() as String;
       }
       s3_endPoint = parse['s3_endPoint'];
       s3_accessKey = parse['s3_accessKey'];
       s3_secretKey = parse['s3_secretKey'];
       s3_bucket = parse['s3_bucket'];
+      hotKeyArea = parse['hotKeyArea']??'';
+      hotKeyWindow = parse['hotKeyWindow']??'';
+      hotKeyScreen = parse['hotKeyScreen']??'';
     }
   }
 
@@ -46,7 +58,7 @@ class Settingstorage {
 
   static const String configFileName = "config.json";
 
-  static String ImageName='';
+  static String ImageName = '';
 
   Settingstorage() {
     Settings = SettingsstorageData();
@@ -57,7 +69,7 @@ class Settingstorage {
     if (configExist) {
       File settingsFile = await getConfigFile();
       final contents = await settingsFile.readAsString();
-       Settings.fromJson(contents);
+      Settings.fromJson(contents);
     }
     return this;
   }
