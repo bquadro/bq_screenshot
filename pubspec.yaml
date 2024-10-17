@@ -77,6 +77,9 @@ dependencies:
   window_manager: ^0.4.2
   flutter_single_instance: ^0.0.1
 
+dependency_overrides:
+  uuid: ^4.5.1
+
 dev_dependencies:
   lints: 4.0.0
 
@@ -89,6 +92,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  inno_bundle:
+
 #  inno_bundle: ^0.7.3
 
 # For information on the generic Dart part of this file, see the
@@ -97,7 +102,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 
 inno_bundle:
-  id: c79198c0-764a-11ef-bdd7-75bb7c940359
+  id: e6134b40-8a22-11ef-a1f6-4b8cea2c75dc
   publisher: Victor
 
 flutter:

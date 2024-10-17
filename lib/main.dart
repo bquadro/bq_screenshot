@@ -34,12 +34,16 @@ final talker = TalkerFlutter.init();
 
 void main() async {
   // checkDateReturn();
-  runZonedGuarded(
-    () async {
-      PlatformDispatcher.instance.onError = (error, stack) {
-        talker.handle(error, stack);
-        return true;
-      };
+  //q
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    talker.handle(error, stack);
+    return true;
+  };
+
+  // runZonedGuarded(
+  //   () async {
+
 
       FlutterError.onError = (details) {
         FlutterError.presentError(details);
@@ -80,15 +84,16 @@ void main() async {
       });
 
 
-      // if (await FlutterSingleInstance.platform.isFirstInstance()) {
+      if (await FlutterSingleInstance.platform.isFirstInstance()) {
         runApp(MyApp());
-      // } else {
-      //   talker.debug("App is already running");
-      //   exit(0);
-      // }
+      } else {
+        talker.debug("App is already running");
 
-      // runZonedGuarded(() async {}
-    },
+        exit(0);
+      }
+
+      runZonedGuarded(() async {},
+    // },
     (error, stackTrace) {
       talker.handle(error, stackTrace);
       talker.debug(stackTrace);

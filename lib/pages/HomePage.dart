@@ -151,7 +151,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
       _handleClickCapture(CaptureMode.screen);
     });
 
-    await hotKeyManager.register(_hotKeyArea, keyUpHandler: (hotKey) {
+    await hotKeyManager.register(_hotKeyArea, keyDownHandler: (hotKey) {
       _handleClickCapture(CaptureMode.region);
     });
 
@@ -581,6 +581,15 @@ class _HomePageWidgetState extends State<HomePageWidget>
       scope: HotKeyScope.system,
     );
 
+    // await hotKeyManager.register(
+    //   hotKeyAreaNew,
+    //   keyDownHandler: (hk){
+    //     print('dfdff');
+    //   },
+    //   // keyUpHandler: _keyUpHandler,
+    // );
+    // return;
+
     switch (hotKeyName) {
       case HotKeyName.region:
         await hotKeyManager.unregister(_hotKeyArea);
@@ -589,11 +598,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
         _settingsStorage.Settings.hotKeyArea = jsonEncode(_hotKeyArea.toJson());
         await _settingsStorage.saveSettings();
 
-        await hotKeyManager.register(hk, keyUpHandler: (hotKey) {
+        await hotKeyManager.register(hotKeyAreaNew, keyDownHandler: (hotKey) {
           _handleClickCapture(CaptureMode.region);
+          // print('dfdfdfdfdf');
+
+
         });
 
-        _settingsStorage.Settings.s3_endPoint = '';
+        // _settingsStorage.Settings.s3_endPoint = '';
 
       case HotKeyName.window:
         await hotKeyManager.unregister(_hotKeyWindow);
@@ -605,7 +617,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
         await _settingsStorage.saveSettings();
 
-        await hotKeyManager.register(hk, keyUpHandler: (hotKey) {
+        await hotKeyManager.register(hk, keyDownHandler: (hotKey) {
           _handleClickCapture(CaptureMode.window);
         });
       case HotKeyName.screen:
@@ -617,7 +629,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
             jsonEncode(_hotKeyScreen.toJson());
         await _settingsStorage.saveSettings();
 
-        await hotKeyManager.register(hk, keyUpHandler: (hotKey) {
+        await hotKeyManager.register(hk, keyDownHandler: (hotKey) {
           _handleClickCapture(CaptureMode.screen);
         });
 
