@@ -1,66 +1,95 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-import 'dart:developer';
+// import 'dart:io';
+
+//import 'package:bq_screenshot/menu.dart';
+//import 'package:bq_screenshot/tray.dart';
+
+// import 'package:tray_manager/tray_manager.dart';
 
 import 'package:flutter_single_instance/flutter_single_instance.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+
+import '/utils/functions.dart';
 
 import '/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:window_manager/window_manager.dart';
 
+//import 'app_window.dart';
+//import 'constants.dart';
+//import 'menu_item.dart';
+
+// import 'package:system_tray/system_tray.dart';
+
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
+// import 'package:english_words/english_words.dart';
+// import 'package:system_tray/system_tray.dart';
+
+// import 'package:system_tray/system_tray.dart' ;
+
 final talker = TalkerFlutter.init();
 
 void main() async {
-  log('Start');
-
-  PlatformDispatcher.instance.onError = (error, stack) {
-    talker.handle(error, stack);
-    return true;
-  };
-
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    talker.handle(details);
-    talker.error('Caught a Flutter error: ${details.exception}');
-  };
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await hotKeyManager.unregisterAll();
-
-  await windowManager.ensureInitialized();
-
-  log('Window Options');
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600),
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.normal,
-    windowButtonVisibility: true,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-    // windowManager.
-  });
-
-  log('Silent Instance');
-  if (await FlutterSingleInstance.platform.isFirstInstance()) {
-    log('Run App');
-    runApp(MyApp());
-  } else {
-    talker.debug("App is already running");
-
-    exit(0);
-  }
-
+  // checkDateReturn();
+  //q
   runZonedGuarded(
-    () async {},
+    () async {
+      PlatformDispatcher.instance.onError = (error, stack) {
+        talker.handle(error, stack);
+        return true;
+      };
+
+      FlutterError.onError = (details) {
+        FlutterError.presentError(details);
+        talker.handle(details);
+        talker.error('Caught a Flutter error: ${details.exception}');
+      };
+
+      // runZonedGuarded(() async {
+
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await hotKeyManager.unregisterAll();
+
+      await windowManager.ensureInitialized();
+
+
+
+
+
+
+
+
+
+      WindowOptions windowOptions = const WindowOptions(
+        size: Size(800, 600),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        windowButtonVisibility: true,
+      );
+
+
+      windowManager.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+        // windowManager.
+      });
+
+
+      // if (await FlutterSingleInstance.platform.isFirstInstance()) {
+        runApp(MyApp());
+      // } else {
+      //   talker.debug("App is already running");
+      //   exit(0);
+      // }
+
+      // runZonedGuarded(() async {}
+    },
     (error, stackTrace) {
       talker.handle(error, stackTrace);
       talker.debug(stackTrace);
@@ -96,7 +125,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    log('Init State');
     super.initState();
     // initSystemTray();
   }
@@ -107,8 +135,11 @@ class _MyAppState extends State<MyApp> {
     // _timer?.cancel();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BqScreenshot',
@@ -120,3 +151,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
