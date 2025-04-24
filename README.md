@@ -33,3 +33,7 @@ https://dev.to/hahouari/creating-easy-windows-installer-for-flutter-apps-using-i
 
 в терминале в папке relese
 `hdiutil create -srcfolder bq_screenshot.app bq_screenshot.dmg`
+
+## Если сборка не запускается  на других  MacOs  устройствах.
+1. Проверить  что  в  XCode  в  секции Runpath Search Paths добавлена папка  /usr/lib/swift и @loader_path/Frameworks
+2. Проверить что сборка подписывается сертификатом компании
