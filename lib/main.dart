@@ -18,23 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:window_manager/window_manager.dart';
 
-//import 'app_window.dart';
-//import 'constants.dart';
-//import 'menu_item.dart';
-
-// import 'package:system_tray/system_tray.dart';
-
-// import 'package:bitsdojo_window/bitsdojo_window.dart';
-// import 'package:english_words/english_words.dart';
-// import 'package:system_tray/system_tray.dart';
-
-// import 'package:system_tray/system_tray.dart' ;
-
 final talker = TalkerFlutter.init();
 
 void main() async {
-  // checkDateReturn();
-  //q
   runZonedGuarded(
     () async {
       PlatformDispatcher.instance.onError = (error, stack) {
@@ -48,21 +34,11 @@ void main() async {
         talker.error('Caught a Flutter error: ${details.exception}');
       };
 
-      // runZonedGuarded(() async {
-
       WidgetsFlutterBinding.ensureInitialized();
 
       await hotKeyManager.unregisterAll();
 
       await windowManager.ensureInitialized();
-
-
-
-
-
-
-
-
 
       WindowOptions windowOptions = const WindowOptions(
         size: Size(800, 600),
@@ -73,22 +49,13 @@ void main() async {
         windowButtonVisibility: true,
       );
 
-
       windowManager.waitUntilReadyToShow(windowOptions, () async {
         await windowManager.show();
         await windowManager.focus();
         // windowManager.
       });
 
-
-      // if (await FlutterSingleInstance.platform.isFirstInstance()) {
-        runApp(MyApp());
-      // } else {
-      //   talker.debug("App is already running");
-      //   exit(0);
-      // }
-
-      // runZonedGuarded(() async {}
+      runApp(MyApp());
     },
     (error, stackTrace) {
       talker.handle(error, stackTrace);
@@ -97,8 +64,6 @@ void main() async {
     },
     zoneSpecification: ZoneSpecification(
       print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-        // Здесь мы можем изменить поведение функции print
-        // parent.print(zone, 'Перехвачено: $line'); // Изменяем вывод
         talker.debug(line);
       },
     ),
@@ -113,12 +78,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // final AppWindow _appWindow = AppWindow();
-  // final SystemTray _systemTray = SystemTray();
-  // final Menu _menuMain = Menu();
-  // final Menu _menuSimple = Menu();
-
-  // Timer? _timer;
   bool _toogleTrayIcon = true;
 
   bool _toogleMenu = true;
@@ -126,20 +85,15 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // initSystemTray();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // _timer?.cancel();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BqScreenshot',
@@ -151,5 +105,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-

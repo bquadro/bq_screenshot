@@ -8,9 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:minio/io.dart';
 import 'package:minio/minio.dart';
 
-// import 'package:minio/io.dart';
-// import 'package:minio/minio.dart';
-
 // Package imports:
 import 'package:pro_image_editor/pro_image_editor.dart';
 
@@ -75,16 +72,9 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
         enableTrace: true,
       );
 
-      // talker.debug("minio.sessionToken = ${minio.sessionToken}");
-
-      // var listBuckets = await minio.listBuckets();
-
-      // talker.debug("listBuckets = $listBuckets");
-
       var result = await minio.fPutObject(
           _settings.Settings.s3_bucket, fileName, filePath);
 
-      // talker.debug("minio.sessionToken afterPut = ${minio.sessionToken}");
       talker.debug("minio result after putObject = ${result}");
 
       if (result.isNotEmpty) {
@@ -94,8 +84,6 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
       }
     }
   }
-
-
 }
 
 Future<String?> checkS3Connection() async {
@@ -112,24 +100,19 @@ Future<String?> checkS3Connection() async {
       enableTrace: true,
     );
 
-    // talker.debug("minio.sessionToken = ${minio.sessionToken}");
     var listBuckets;
-    // try {
 
-       listBuckets = await minio.listBuckets();
+    listBuckets = await minio.listBuckets();
 
-      bool isBucketExist = await minio.bucketExists(_settings.Settings.s3_bucket);
+    bool isBucketExist = await minio.bucketExists(_settings.Settings.s3_bucket);
 
-      if(!isBucketExist){
-        throw 'Error, check your settings';
-      }
-    // } catch (e) {
-    //     talker.handle(e);
-    // }
+    if (!isBucketExist) {
+      throw 'Error, check your settings';
+    }
 
     talker.debug("listBuckets = $listBuckets");
     return listBuckets.toString();
-  }else{
+  } else {
     throw 'Error, check your settings';
   }
 }

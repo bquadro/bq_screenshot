@@ -85,7 +85,6 @@ class _HomePageWidgetState extends State<HomePageWidget>
     _init();
 
     initTray();
-
   }
 
   void _init() async {
@@ -141,7 +140,6 @@ class _HomePageWidgetState extends State<HomePageWidget>
     await trayManager.setContextMenu(menu);
   }
 
-
   void registerHotKeys() async {
     Settingstorage data = await _settingsStorage.loadSettings();
 
@@ -160,68 +158,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
     });
   }
 
-  // void getHotKeyFromSettingsOr(Settingstorage data) {
-  //   var ar = data.Settings.hotKeyArea;
-  //
-  //   if (ar == null || ar.isEmpty) {
-  //     _hotKeyArea = HotKey(
-  //       key: PhysicalKeyboardKey.digit8,
-  //       identifier: '8',
-  //       modifiers: [HotKeyModifier.alt],
-  //       // Set hotkey scope (default is HotKeyScope.system)
-  //       scope: HotKeyScope.system, // Set as inapp-wide hotkey.
-  //     );
-  //
-  //   }else{
-  //
-  //     final json = jsonDecode(ar);
-  //     _hotKeyArea = HotKey.fromJson(json);
-  //   }
-  //
-  //   var ar2 = data.Settings.hotKeyWindow;
-  //
-  //   if (ar2 == null || ar2.isEmpty) {
-  //     _hotKeyWindow = HotKey(
-  //       key: PhysicalKeyboardKey.digit7,
-  //       modifiers: [HotKeyModifier.alt],
-  //       identifier: '7',
-  //       scope: HotKeyScope.system,
-  //     );
-  //   }else{
-  //     final json = jsonDecode(ar2);
-  //     _hotKeyWindow = HotKey.fromJson(json);
-  //   }
-  //
-  //
-  //   var ar3 = data.Settings.hotKeyScreen;
-  //
-  //   if (ar3 == null || ar3.isEmpty) {
-  //
-  //     _hotKeyScreen = HotKey(
-  //       key: PhysicalKeyboardKey.digit6,
-  //       modifiers: [HotKeyModifier.alt],
-  //       identifier: '6',
-  //       scope: HotKeyScope.system,
-  //     );
-  //
-  //   }else{
-  //     final json = jsonDecode(ar3);
-  //     _hotKeyScreen = HotKey.fromJson(json);
-  //   }
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  // }
-
   void getHotKeyFromSettingsOr(Settingstorage data) {
-
-
-
     _hotKeyArea = _getHotKey(data.Settings.hotKeyArea,
         PhysicalKeyboardKey.digit8, '8', [HotKeyModifier.alt]);
 
@@ -231,20 +168,13 @@ class _HomePageWidgetState extends State<HomePageWidget>
     _hotKeyScreen = _getHotKey(data.Settings.hotKeyScreen,
         PhysicalKeyboardKey.digit6, '6', [HotKeyModifier.alt]);
 
+    _hotKeyScreenToolTip = makeStringTooltip(_hotKeyScreen);
 
-        _hotKeyScreenToolTip =
-            makeStringTooltip(_hotKeyScreen);
+    _hotKeyAreaToolTip = makeStringTooltip(_hotKeyArea);
 
-        _hotKeyAreaToolTip =
-            makeStringTooltip(_hotKeyArea);
+    _hotKeyWindowToolTip = makeStringTooltip(_hotKeyWindow);
 
-        _hotKeyWindowToolTip =
-            makeStringTooltip(_hotKeyWindow);
-
-        setState(() {
-
-        });
-
+    setState(() {});
   }
 
   HotKey _getHotKey(String? hotKeyData, PhysicalKeyboardKey defaultKey,
@@ -271,9 +201,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
       child: TalkerWrapper(
         talker: talker,
         options: TalkerWrapperOptions(
-          enableErrorAlerts: true,
-          enableExceptionAlerts: true
-        ),
+            enableErrorAlerts: true, enableExceptionAlerts: true),
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: ColorsUtil.secondaryBackground,
@@ -404,8 +332,6 @@ class _HomePageWidgetState extends State<HomePageWidget>
                         ),
                       ),
                       Tooltip(
-                        // message: _hotKeyScreen.modifiers?.fold<String>(
-                        //     '', (previousValue, element) => previousValue + element.name),
                         message: _hotKeyScreenToolTip,
                         child: FFButtonWidget(
                           onPressed: () {
@@ -628,10 +554,6 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
   /// Событие создания скриншота
   Future<void> _handleClickCapture(CaptureMode mode) async {
-
-
-
-
     Settingstorage settings = await Settingstorage().loadSettings();
 
     Settingstorage.ImageName =
@@ -648,15 +570,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
     //
     // file1 = null;
 
-
     _lastCapturedData = await screenCapturer.capture(
       mode: mode,
       imagePath: imagePath,
       copyToClipboard: true,
       silent: false,
     );
-
-
 
     if (_lastCapturedData != null) {
       File file = File(_lastCapturedData!.imagePath!);
@@ -670,7 +589,6 @@ class _HomePageWidgetState extends State<HomePageWidget>
       talker.debug('User canceled capture');
     }
 
-
     setState(() {});
   }
 
@@ -682,26 +600,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
     windowManager.focus();
 
     return ProImageEditor.file(
-
       file,
       callbacks: ProImageEditorCallbacks(
-
-        onThumbnailGenerated: (v,m){
-
-
-          return Future.value();
-        },
-        onImageEditingStarted: (){
+        // onThumbnailGenerated: (v,m){
+        //   return Future.value();
+        // },
+        onImageEditingStarted: () {
           onImageEditingStarted();
-
-
-
         },
         onImageEditingComplete: onImageEditingComplete,
         onCloseEditor: onCloseEditor,
       ),
       configs: ProImageEditorConfigs(
-
           designMode: platformDesignMode,
           customWidgets: ImageEditorCustomWidgets(
             mainEditor: CustomWidgetsMainEditor(
@@ -794,16 +704,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
               try {
                 await uploadToS3(Settingstorage.ImageName, imagePath);
               } catch (e) {
-
                 talker.handle(e);
-              Future.delayed(Duration.zero,(){
-                throw TalkerException(Exception(e));
-
-              });
-
-
-
-
+                Future.delayed(Duration.zero, () {
+                  throw TalkerException(Exception(e));
+                });
               }
             }
             editor.doneEditing();
@@ -853,11 +757,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
   @override
   void onWindowClose() async {
-
     bool _isPreventClose = await windowManager.isPreventClose();
 
     if (_isPreventClose) {
-
       windowManager.hide();
     }
   }
