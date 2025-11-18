@@ -609,20 +609,19 @@ class _HomePageWidgetState extends State<HomePageWidget>
           onImageEditingStarted();
         },
         onImageEditingComplete: onImageEditingComplete,
-        onCloseEditor: onCloseEditor,
+        onCloseEditor: (editorMode) => onCloseEditor,
       ),
       configs: ProImageEditorConfigs(
           designMode: platformDesignMode,
-          customWidgets: ImageEditorCustomWidgets(
-            mainEditor: CustomWidgetsMainEditor(
-              appBar: (editor, rebuildStream) => editor.selectedLayerIndex < 0
-                  ? ReactiveCustomAppbar(
-                      stream: rebuildStream,
-                      builder: (_) =>
-                          _buildAppBar(editor, _lastCapturedData?.imagePath))
-                  : null,
+          mainEditor: MainEditorConfigs(
+            widgets: MainEditorWidgets(
+              appBar: (editor, rebuildStream) => ReactiveAppbar(
+                  stream: rebuildStream,
+                  builder: (_) => _buildAppBar(editor,_lastCapturedData?.imagePath)
+              )
             ),
-          )),
+          ),
+      )
     );
   }
 

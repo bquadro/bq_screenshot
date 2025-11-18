@@ -86,6 +86,10 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
   }
 }
 
+extension on ProImageEditorState? {
+  set disablePopScope(bool disablePopScope) {}
+}
+
 Future<String?> checkS3Connection() async {
   Settingstorage _settings = await Settingstorage().loadSettings();
 

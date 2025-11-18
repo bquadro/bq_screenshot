@@ -3,11 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  emoji_picker_flutter
   hotkey_manager_linux
   pasteboard
   screen_capturer_linux
-  screen_retriever
+  screen_retriever_linux
   system_tray
   tray_manager
   url_launcher_linux

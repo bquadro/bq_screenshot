@@ -3,11 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  emoji_picker_flutter
   hotkey_manager_windows
   pasteboard
   screen_capturer_windows
-  screen_retriever
+  screen_retriever_windows
   share_plus
   system_tray
   tray_manager
