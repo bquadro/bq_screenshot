@@ -695,6 +695,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
           icon: const Icon(Icons.done),
           iconSize: 28,
           onPressed: () async {
+            print('Сохраняем файл');
+
             if (imagePath != null) {
               File file = File(imagePath);
               Uint8List? bytes = await editor.captureEditorImage();
@@ -710,6 +712,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
               }
             }
             editor.doneEditing();
+
+            /**
+             * Тут надо допписать  закрытие редактора
+             */
+
           },
         ),
       ],
