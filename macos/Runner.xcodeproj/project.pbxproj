@@ -579,6 +579,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
+				FLUTTER_BUILD_NAME = 1.1.1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -720,6 +722,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
+				FLUTTER_BUILD_NAME = 1.1.1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -749,6 +753,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
+				FLUTTER_BUILD_NAME = 1.1.1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
