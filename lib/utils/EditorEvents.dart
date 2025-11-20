@@ -46,16 +46,26 @@ mixin EditorEventsState<T extends StatefulWidget> on State<T> {
   }
 
   void onCloseEditor({
+    required EditorMode editorMode,
+    bool enablePop = true,
     bool showThumbnail = false,
     ui.Image? rawOriginalImage,
-    final ImageGenerationConfigs? generatioConfigs,
+    final ImageGenerationConfigs? generationConfigs,
   }) async {
+    if (editorMode != EditorMode.main) return Navigator.pop(context);
+
     if (editedBytes != null) {
+      // Pre-cache the edited image to improve display performance.
       await precacheImage(MemoryImage(editedBytes!), context);
       if (!mounted) return;
-      editorKey.currentState?.disablePopScope = true;
+
+      // Navigate to the preview page to display the edited image.
+      editorKey.currentState?.isPopScopeDisabled = true;
     }
-    if (mounted) Navigator.pop(context);
+
+    if (mounted && enablePop) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> uploadToS3(String fileName, String filePath) async {

@@ -609,7 +609,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
           onImageEditingStarted();
         },
         onImageEditingComplete: onImageEditingComplete,
-        onCloseEditor: (editorMode) => onCloseEditor,
+        onCloseEditor: (editorMode) => onCloseEditor(editorMode: editorMode),
       ),
       configs: ProImageEditorConfigs(
           designMode: platformDesignMode,
