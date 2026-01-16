@@ -45,3 +45,7 @@ app.*.map.json
 /android/app/release
 
 Xcode.app
+
+# Node.js
+/node_modules
+npm-debug.log*

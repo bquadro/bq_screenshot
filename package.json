@@ -1,0 +1,24 @@
+{
+  "name": "bq_screenshot",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bquadro/bq_screenshot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bquadro/bq_screenshot/issues"
+  },
+  "homepage": "https://github.com/bquadro/bq_screenshot#readme",
+  "description": "Начальная конфигурация Electron-приложения для съёмки экранного контента."
+  "devDependencies": {
+    "electron": "^40.0.0"
+  }
+}
