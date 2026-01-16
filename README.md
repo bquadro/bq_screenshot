@@ -16,6 +16,28 @@ flutter create --platforms=macos .
 flutter run --release 
 ```  
 
+Список  зависимых файлов swift для  работы
+```
+Путь до файлов /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx
+libswiftAppKit.dylib
+libswiftCore.dylib
+libswiftCoreAudio.dylib
+libswiftCoreData.dylib
+libswiftCoreFoundation.dylib
+libswiftCoreGraphics.dylib
+libswiftCoreImage.dylib
+libswiftCoreMedia.dylib
+libswiftDarwin.dylib
+libswiftDispatch.dylib
+libswiftFoundation.dylib
+libswiftIOKit.dylib
+libswiftMetal.dylib
+libswiftObjectiveC.dylib
+libswiftQuartzCore.dylib
+libswiftXPC.dylib
+libswiftos.dylib
+```
+
 
 ## Windows
 
@@ -37,3 +59,4 @@ https://dev.to/hahouari/creating-easy-windows-installer-for-flutter-apps-using-i
 ## Если сборка не запускается  на других  MacOs  устройствах.
 1. Проверить  что  в  XCode  в  секции Runpath Search Paths добавлена папка  /usr/lib/swift и @loader_path/Frameworks
 2. Проверить что сборка подписывается сертификатом компании
+3. После сборки в пакете программы  в папке Framevirks должнны  появиться файлы libswift*

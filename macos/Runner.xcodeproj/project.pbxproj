@@ -27,8 +27,25 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
-		9E9C82F19AB9584CC0A5CF1C /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CDAD132AF545AD7FB0A48F /* Pods_Runner.framework */; };
-		F94012EDFEAE774F6263DBCF /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 085236615D096B8D878750CC /* Pods_RunnerTests.framework */; };
+		60795E782EF3062500C798AA /* libswiftObjectiveC.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E672EF3062400C798AA /* libswiftObjectiveC.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E792EF3062500C798AA /* libswiftCoreFoundation.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E682EF3062400C798AA /* libswiftCoreFoundation.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7A2EF3062500C798AA /* libswiftCoreData.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E692EF3062400C798AA /* libswiftCoreData.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7B2EF3062500C798AA /* libswiftCore.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6A2EF3062400C798AA /* libswiftCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7C2EF3062500C798AA /* libswiftDispatch.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6B2EF3062400C798AA /* libswiftDispatch.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7D2EF3062500C798AA /* libswiftMetal.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6C2EF3062400C798AA /* libswiftMetal.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7E2EF3062500C798AA /* libswiftXPC.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6D2EF3062500C798AA /* libswiftXPC.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E7F2EF3062500C798AA /* libswiftos.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6E2EF3062500C798AA /* libswiftos.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E802EF3062500C798AA /* libswiftIOKit.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E6F2EF3062500C798AA /* libswiftIOKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E812EF3062500C798AA /* libswiftQuartzCore.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E702EF3062500C798AA /* libswiftQuartzCore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E822EF3062500C798AA /* libswiftCoreAudio.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E712EF3062500C798AA /* libswiftCoreAudio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E832EF3062500C798AA /* libswiftAppKit.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E722EF3062500C798AA /* libswiftAppKit.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E842EF3062500C798AA /* libswiftDarwin.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E732EF3062500C798AA /* libswiftDarwin.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E852EF3062500C798AA /* libswiftCoreGraphics.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E742EF3062500C798AA /* libswiftCoreGraphics.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E862EF3062600C798AA /* libswiftCoreMedia.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E752EF3062500C798AA /* libswiftCoreMedia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E872EF3062600C798AA /* libswiftCoreImage.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E762EF3062500C798AA /* libswiftCoreImage.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		60795E882EF3062600C798AA /* libswiftFoundation.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 60795E772EF3062500C798AA /* libswiftFoundation.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		AFA5C7EC6F6646420C2F6E95 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4753FFB5471495448446D1E /* Pods_RunnerTests.framework */; };
+		F11F6E0B9FC317000F469F8C /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B02005E31A6300C20235A4E0 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +72,23 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				60795E782EF3062500C798AA /* libswiftObjectiveC.dylib in Bundle Framework */,
+				60795E792EF3062500C798AA /* libswiftCoreFoundation.dylib in Bundle Framework */,
+				60795E7A2EF3062500C798AA /* libswiftCoreData.dylib in Bundle Framework */,
+				60795E7B2EF3062500C798AA /* libswiftCore.dylib in Bundle Framework */,
+				60795E7C2EF3062500C798AA /* libswiftDispatch.dylib in Bundle Framework */,
+				60795E7D2EF3062500C798AA /* libswiftMetal.dylib in Bundle Framework */,
+				60795E7E2EF3062500C798AA /* libswiftXPC.dylib in Bundle Framework */,
+				60795E7F2EF3062500C798AA /* libswiftos.dylib in Bundle Framework */,
+				60795E802EF3062500C798AA /* libswiftIOKit.dylib in Bundle Framework */,
+				60795E812EF3062500C798AA /* libswiftQuartzCore.dylib in Bundle Framework */,
+				60795E822EF3062500C798AA /* libswiftCoreAudio.dylib in Bundle Framework */,
+				60795E832EF3062500C798AA /* libswiftAppKit.dylib in Bundle Framework */,
+				60795E842EF3062500C798AA /* libswiftDarwin.dylib in Bundle Framework */,
+				60795E852EF3062500C798AA /* libswiftCoreGraphics.dylib in Bundle Framework */,
+				60795E862EF3062600C798AA /* libswiftCoreMedia.dylib in Bundle Framework */,
+				60795E872EF3062600C798AA /* libswiftCoreImage.dylib in Bundle Framework */,
+				60795E882EF3062600C798AA /* libswiftFoundation.dylib in Bundle Framework */,
 			);
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,10 +96,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		085236615D096B8D878750CC /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0A9AF459BB71935754267F9A /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		26D4B5CC7CBD34A0A2F5248B /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		2BA3939567D5146F7F32B1FB /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		0D65FC15B01208C47F298431 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		160864116A272C2DA1462A9F /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -82,12 +114,31 @@
 		33E51913231747F40026EE4D /* DebugProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DebugProfile.entitlements; sourceTree = "<group>"; };
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
-		59CDAD132AF545AD7FB0A48F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60795E672EF3062400C798AA /* libswiftObjectiveC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftObjectiveC.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftObjectiveC.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E682EF3062400C798AA /* libswiftCoreFoundation.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreFoundation.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreFoundation.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E692EF3062400C798AA /* libswiftCoreData.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreData.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreData.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6A2EF3062400C798AA /* libswiftCore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCore.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCore.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6B2EF3062400C798AA /* libswiftDispatch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftDispatch.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftDispatch.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6C2EF3062400C798AA /* libswiftMetal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftMetal.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftMetal.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6D2EF3062500C798AA /* libswiftXPC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftXPC.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftXPC.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6E2EF3062500C798AA /* libswiftos.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftos.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftos.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E6F2EF3062500C798AA /* libswiftIOKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftIOKit.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftIOKit.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E702EF3062500C798AA /* libswiftQuartzCore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftQuartzCore.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftQuartzCore.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E712EF3062500C798AA /* libswiftCoreAudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreAudio.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreAudio.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E722EF3062500C798AA /* libswiftAppKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftAppKit.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftAppKit.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E732EF3062500C798AA /* libswiftDarwin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftDarwin.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftDarwin.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E742EF3062500C798AA /* libswiftCoreGraphics.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreGraphics.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreGraphics.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E752EF3062500C798AA /* libswiftCoreMedia.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreMedia.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreMedia.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E762EF3062500C798AA /* libswiftCoreImage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftCoreImage.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftCoreImage.dylib"; sourceTree = DEVELOPER_DIR; };
+		60795E772EF3062500C798AA /* libswiftFoundation.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libswiftFoundation.dylib; path = "Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/macosx/libswiftFoundation.dylib"; sourceTree = DEVELOPER_DIR; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		AD9D199D8AF96C9F9C72DD64 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		E514F763783817312FBB1C98 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
-		F3AD9E143E22C675AA7FC1D7 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		A06D0137FC0C320438380940 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		AF6EE2F148B1CF000871D88F /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		B02005E31A6300C20235A4E0 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4753FFB5471495448446D1E /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB6B5FB00B02509AE76A4E88 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		FD157A6714367A0C3BB4A81C /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F94012EDFEAE774F6263DBCF /* Pods_RunnerTests.framework in Frameworks */,
+				AFA5C7EC6F6646420C2F6E95 /* Pods_RunnerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,13 +154,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E9C82F19AB9584CC0A5CF1C /* Pods_Runner.framework in Frameworks */,
+				F11F6E0B9FC317000F469F8C /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B4E83C6DF43857521A8509C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0D65FC15B01208C47F298431 /* Pods-Runner.debug.xcconfig */,
+				AF6EE2F148B1CF000871D88F /* Pods-Runner.release.xcconfig */,
+				A06D0137FC0C320438380940 /* Pods-Runner.profile.xcconfig */,
+				FD157A6714367A0C3BB4A81C /* Pods-RunnerTests.debug.xcconfig */,
+				160864116A272C2DA1462A9F /* Pods-RunnerTests.release.xcconfig */,
+				FB6B5FB00B02509AE76A4E88 /* Pods-RunnerTests.profile.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		331C80D6294CF71000263BE5 /* RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,12 +196,29 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
+				60795E722EF3062500C798AA /* libswiftAppKit.dylib */,
+				60795E6A2EF3062400C798AA /* libswiftCore.dylib */,
+				60795E712EF3062500C798AA /* libswiftCoreAudio.dylib */,
+				60795E692EF3062400C798AA /* libswiftCoreData.dylib */,
+				60795E682EF3062400C798AA /* libswiftCoreFoundation.dylib */,
+				60795E742EF3062500C798AA /* libswiftCoreGraphics.dylib */,
+				60795E762EF3062500C798AA /* libswiftCoreImage.dylib */,
+				60795E752EF3062500C798AA /* libswiftCoreMedia.dylib */,
+				60795E732EF3062500C798AA /* libswiftDarwin.dylib */,
+				60795E6B2EF3062400C798AA /* libswiftDispatch.dylib */,
+				60795E772EF3062500C798AA /* libswiftFoundation.dylib */,
+				60795E6F2EF3062500C798AA /* libswiftIOKit.dylib */,
+				60795E6C2EF3062400C798AA /* libswiftMetal.dylib */,
+				60795E672EF3062400C798AA /* libswiftObjectiveC.dylib */,
+				60795E6E2EF3062500C798AA /* libswiftos.dylib */,
+				60795E702EF3062500C798AA /* libswiftQuartzCore.dylib */,
+				60795E6D2EF3062500C798AA /* libswiftXPC.dylib */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
 				33CC10EE2044A3C60003C045 /* Products */,
 				D73912EC22F37F3D000D13A0 /* Frameworks */,
-				BF5374514E628064797BBB35 /* Pods */,
+				0B4E83C6DF43857521A8509C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,24 +266,11 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
-		BF5374514E628064797BBB35 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F3AD9E143E22C675AA7FC1D7 /* Pods-Runner.debug.xcconfig */,
-				26D4B5CC7CBD34A0A2F5248B /* Pods-Runner.release.xcconfig */,
-				AD9D199D8AF96C9F9C72DD64 /* Pods-Runner.profile.xcconfig */,
-				0A9AF459BB71935754267F9A /* Pods-RunnerTests.debug.xcconfig */,
-				E514F763783817312FBB1C98 /* Pods-RunnerTests.release.xcconfig */,
-				2BA3939567D5146F7F32B1FB /* Pods-RunnerTests.profile.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				59CDAD132AF545AD7FB0A48F /* Pods_Runner.framework */,
-				085236615D096B8D878750CC /* Pods_RunnerTests.framework */,
+				B02005E31A6300C20235A4E0 /* Pods_Runner.framework */,
+				B4753FFB5471495448446D1E /* Pods_RunnerTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -214,7 +282,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C80DE294CF71000263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
 			buildPhases = (
-				9C5B6ECDBBA1E3C3CA447F05 /* [CP] Check Pods Manifest.lock */,
+				89DCA3FE2C402271583058DA /* [CP] Check Pods Manifest.lock */,
 				331C80D1294CF70F00263BE5 /* Sources */,
 				331C80D2294CF70F00263BE5 /* Frameworks */,
 				331C80D3294CF70F00263BE5 /* Resources */,
@@ -233,13 +301,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33CC10FB2044A3C60003C045 /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
-				CE5A8E077B1A3BDAD0DFAF43 /* [CP] Check Pods Manifest.lock */,
+				061D339B5EBC0D5B64650408 /* [CP] Check Pods Manifest.lock */,
 				33CC10E92044A3C60003C045 /* Sources */,
 				33CC10EA2044A3C60003C045 /* Frameworks */,
 				33CC10EB2044A3C60003C045 /* Resources */,
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
-				66E8D414C06A6B8E26F55623 /* [CP] Embed Pods Frameworks */,
+				9E78039D576F3FB3F1751016 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -322,6 +390,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		061D339B5EBC0D5B64650408 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3399D490228B24CF009A79C7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -360,24 +450,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh && touch Flutter/ephemeral/tripwire";
 		};
-		66E8D414C06A6B8E26F55623 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9C5B6ECDBBA1E3C3CA447F05 /* [CP] Check Pods Manifest.lock */ = {
+		89DCA3FE2C402271583058DA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -399,26 +472,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CE5A8E077B1A3BDAD0DFAF43 /* [CP] Check Pods Manifest.lock */ = {
+		9E78039D576F3FB3F1751016 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -472,12 +540,11 @@
 /* Begin XCBuildConfiguration section */
 		331C80DB294CF71000263BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A9AF459BB71935754267F9A /* Pods-RunnerTests.debug.xcconfig */;
+			baseConfigurationReference = FD157A6714367A0C3BB4A81C /* Pods-RunnerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.bqScreenshot.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -488,12 +555,11 @@
 		};
 		331C80DC294CF71000263BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E514F763783817312FBB1C98 /* Pods-RunnerTests.release.xcconfig */;
+			baseConfigurationReference = 160864116A272C2DA1462A9F /* Pods-RunnerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.bqScreenshot.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -504,12 +570,11 @@
 		};
 		331C80DD294CF71000263BE5 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2BA3939567D5146F7F32B1FB /* Pods-RunnerTests.profile.xcconfig */;
+			baseConfigurationReference = FB6B5FB00B02509AE76A4E88 /* Pods-RunnerTests.profile.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.bqScreenshot.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -559,7 +624,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -572,15 +637,14 @@
 			baseConfigurationReference = 33E5194F232828860026EE4D /* AppInfo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/DebugProfile.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
-				FLUTTER_BUILD_NAME = 1.1.1;
-				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -588,9 +652,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 1.1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = BqScreenshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -600,7 +662,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Profile;
@@ -652,7 +713,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -688,7 +749,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -702,7 +763,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -715,15 +776,14 @@
 			baseConfigurationReference = 33E5194F232828860026EE4D /* AppInfo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/DebugProfile.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
-				FLUTTER_BUILD_NAME = 1.1.1;
-				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -731,9 +791,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 1.1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = BqScreenshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -745,28 +803,22 @@
 			baseConfigurationReference = 33E5194F232828860026EE4D /* AppInfo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Release.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 2CD57JTR34;
-				FLUTTER_BUILD_NAME = 1.1.1;
-				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BqScreenshot;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-					/usr/lib/swift,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 1.1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = BqScreenshot;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -776,7 +828,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Manual;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -785,7 +836,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

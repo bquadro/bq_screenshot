@@ -3,6 +3,8 @@
 **Project:** `opencode/` (Flutter desktop application)  
 **Target platforms:** macOS 🖥️ & Windows 🪟  
 
+Всегда отвечай на Русском
+
 ---
 
 ## 1️⃣ Purpose of the Agents
