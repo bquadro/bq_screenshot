@@ -58,6 +58,7 @@ ipcHandlers.register();
 app.whenReady().then(() => {
   trayController.ensure();
   createMainWindow();
+  trayController.setDockIcon();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

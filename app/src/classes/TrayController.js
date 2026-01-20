@@ -8,7 +8,7 @@ const PLATFORM_DIRECTION = {
   linux: 'tray-linux.png',
 };
 
-const FALLBACK_ICON_PATHS = [
+const FALLBACK_BASE_PATHS = [
   path.join(__dirname, '..', '..', '.vite', 'build', 'assets'),
   path.join(__dirname, '..', '..', '.vite', 'assets'),
   path.join(__dirname, '..', 'assets'),
@@ -21,7 +21,7 @@ export default class TrayController {
     this.app = appInstance;
     this.getWindow = getWindow;
     this.tray = null;
-    const iconPath = this.resolveIconPath();
+    const iconPath = this.resolveAssetPath(PLATFORM_DIRECTION[process.platform] || PLATFORM_DIRECTION.linux);
     this.icon = iconPath ? nativeImage.createFromPath(iconPath) : nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
     if (this.icon.isEmpty()) {
       this.icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
@@ -124,18 +124,26 @@ export default class TrayController {
     this.tray = null;
   }
 
-  resolveIconPath() {
-    const iconName = PLATFORM_DIRECTION[process.platform] || PLATFORM_DIRECTION.linux;
-    if (!iconName) {
+  resolveAssetPath(filename) {
+    if (!filename) {
       return null;
     }
-    for (const base of FALLBACK_ICON_PATHS) {
-      for (const suffix of [path.join(base, iconName)]) {
-        if (existsSync(suffix)) {
-          return suffix;
-        }
+    for (const base of FALLBACK_BASE_PATHS) {
+      const candidate = path.join(base, filename);
+      if (existsSync(candidate)) {
+        return candidate;
       }
     }
     return null;
+  }
+
+  setDockIcon() {
+    if (process.platform !== 'darwin' || !this.app?.dock) {
+      return;
+    }
+    const iconPath = this.resolveAssetPath('app-icon.png');
+    if (iconPath) {
+      this.app.dock.setIcon(nativeImage.createFromPath(iconPath));
+    }
   }
 }
