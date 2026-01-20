@@ -84,32 +84,20 @@ import CaptureService from './classes/CaptureService.js';
 import UploadService from './classes/UploadService.js';
 import translations from './lang/index.js';
 import uiConfig from './config/ui.js';
+import {
+  createDefaultForm,
+  applyLoadedSettings as applyLoadedSettingsHelper,
+  gatherSettingsPayload,
+  buildHotkeyBindings,
+} from './modules/settingsUtils.js';
+import { useUploadLink } from './modules/uploadLink.js';
+import { createCaptureActions } from './modules/captureActions.js';
+import { ensureDomainEndpoint } from './modules/s3Utils.js';
 
 const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
 const uploadService = new UploadService();
-
-// Возвращает шаблон структуры формы настроек.
-const createDefaultForm = () => ({
-  fullScreenCapture: true,
-  areaCapture: true,
-  videoCapture: false,
-  screenshotEditor: true,
-  minimizeToTray: true,
-  hotkeyFullScreen: 'CmdOrCtrl+Shift+W',
-  hotkeyArea: 'CmdOrCtrl+Shift+E',
-  hotkeyVideo: 'CmdOrCtrl+Shift+R',
-  hotkeyEditor: 'CmdOrCtrl+Shift+T',
-  saveFolder: '',
-  uploadToS3: false,
-  s3Endpoint: '',
-  s3Region: 'us-east-1',
-  s3Bucket: '',
-  s3AccessKey: '',
-  s3SecretKey: '',
-  s3UseSsl: true,
-});
 
 const settingsForm = reactive(createDefaultForm());
 const settingsStatus = ref(localizationService.t('settings.statusNotLoaded'));
@@ -131,22 +119,6 @@ const linkStatus = ref('');
 const isS3Testing = ref(false);
 const s3TestStatus = ref('');
 
-const normalizeS3Endpoint = (value = '') => {
-  const trimmed = (value || '').trim();
-  if (!trimmed) {
-    return '';
-  }
-  const withoutProtocol = trimmed.replace(/^[a-z]+:\/\//i, '');
-  return withoutProtocol.replace(/\/.*$/, '');
-};
-
-const ensureDomainEndpoint = () => {
-  const normalized = normalizeS3Endpoint(settingsForm.s3Endpoint);
-  if (normalized !== settingsForm.s3Endpoint) {
-    settingsForm.s3Endpoint = normalized;
-  }
-};
-
 // При смене языка обновляем словарь и статусы.
 watch(language, (value) => {
   localizationService.setLanguage(value);
@@ -162,34 +134,45 @@ const handleLanguageUpdate = (value) => {
 // Удобный доступ к переводу по ключу.
 const t = (key) => localizationService.t(key);
 
-const applyLoadedSettings = (loaded) => {
-  // Применяем загруженные значения настроек к форме.
-  settingsForm.fullScreenCapture = Boolean(loaded.screenshots?.fullScreen);
-  settingsForm.areaCapture = Boolean(loaded.screenshots?.area);
-  settingsForm.videoCapture = Boolean(loaded.videoCapture?.enabled);
-  settingsForm.screenshotEditor = Boolean(loaded.editor?.enabled);
-  settingsForm.minimizeToTray = Boolean(loaded.tray?.minimizeToTray);
-  settingsForm.hotkeyFullScreen = loaded.hotkeys?.captureFullScreen || settingsForm.hotkeyFullScreen;
-  settingsForm.hotkeyArea = loaded.hotkeys?.captureArea || settingsForm.hotkeyArea;
-  settingsForm.hotkeyVideo = loaded.hotkeys?.captureVideo || settingsForm.hotkeyVideo;
-  settingsForm.hotkeyEditor = loaded.hotkeys?.openEditor || settingsForm.hotkeyEditor;
-  settingsForm.saveFolder = loaded.storage?.folder || settingsForm.saveFolder;
-  settingsForm.uploadToS3 = Boolean(loaded.s3?.uploadOnCapture || loaded.s3?.enabled);
-  settingsForm.s3Endpoint = loaded.s3?.endpoint || settingsForm.s3Endpoint;
-  settingsForm.s3Region = loaded.s3?.region || settingsForm.s3Region;
-  settingsForm.s3Bucket = loaded.s3?.bucket || settingsForm.s3Bucket;
-  settingsForm.s3AccessKey = loaded.s3?.accessKey || settingsForm.s3AccessKey;
-  settingsForm.s3SecretKey = loaded.s3?.secretKey || settingsForm.s3SecretKey;
-  settingsForm.s3UseSsl = Boolean(loaded.s3?.useSsl);
-  language.value = loaded.language || language.value;
-  registerHotkeys();
-};
+const { updateUploadLink, copyUploadedLink } = useUploadLink({
+  settingsForm,
+  uploadService,
+  uploadedLink,
+  linkStatus,
+  t,
+});
+
+const {
+  captureFullScreen,
+  captureArea,
+  handleEditorSave,
+  handleEditorCancel,
+  startRecording,
+} = createCaptureActions({
+  captureService,
+  settingsForm,
+  captureStatus,
+  previewUrl,
+  editorImage,
+  areaImage,
+  currentPage,
+  isCapturing,
+  screenshotPath,
+  updateUploadLink,
+  t,
+});
 
 const registerHotkeys = () => {
-  const bindings = buildHotkeyBindings();
+  const bindings = buildHotkeyBindings(settingsForm);
   if (window.electronAPI?.registerGlobalHotkeys) {
     window.electronAPI.registerGlobalHotkeys(bindings);
   }
+};
+
+const applyLoadedSettings = (loaded) => {
+  applyLoadedSettingsHelper(loaded, settingsForm);
+  language.value = loaded.language || language.value;
+  registerHotkeys();
 };
 
 const gatherPayload = () => ({
@@ -248,7 +231,7 @@ const saveSettings = async () => {
   settingsStatus.value = t('settings.statusSaving');
   isSaving.value = true;
 
-  ensureDomainEndpoint();
+  ensureDomainEndpoint(settingsForm);
 
   try {
     await settingsService.save(gatherPayload());
@@ -278,122 +261,13 @@ const chooseSaveFolder = async () => {
   }
 };
 
-const captureFullScreen = async () => {
-  // Делаем полноэкранный скриншот и открываем редактор.
-  captureStatus.value = t('capture.statusSaving');
-  isCapturing.value = true;
-  previewUrl.value = '';
-
-  try {
-    const base64 = await captureService.capture();
-    editorImage.value = `data:image/png;base64,${base64}`;
-    currentPage.value = 'editor';
-    captureStatus.value = t('capture.statusEditorOpen');
-
-    const saved = await captureService.save(base64);
-    if (saved?.filePath) {
-      screenshotPath.value = saved.filePath;
-      await updateUploadLink(saved.filePath);
-    } else {
-      captureStatus.value = t('capture.statusNoPath');
-    }
-
-    await showWindowAfterCapture();
-  } catch (error) {
-    console.error('capture', error);
-    captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusUnknownError')}`;
-    previewUrl.value = '';
-  } finally {
-    isCapturing.value = false;
-  }
-};
-
-const captureArea = async () => {
-  // Захватываем скриншот области и показываем страницу выбора.
-  captureStatus.value = t('capture.areaSelecting');
-  isCapturing.value = true;
-  previewUrl.value = '';
-
-  try {
-    const base64 = await captureService.capture();
-    areaImage.value = `data:image/png;base64,${base64}`;
-    currentPage.value = 'area';
-
-    const saved = await captureService.save(base64);
-    if (saved?.filePath) {
-      screenshotPath.value = saved.filePath;
-      await updateUploadLink(saved.filePath);
-    } else {
-      captureStatus.value = t('capture.statusNoPath');
-    }
-
-    await showWindowAfterCapture();
-  } catch (error) {
-    console.error('capture area', error);
-    captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusAreaError')}`;
-  } finally {
-    isCapturing.value = false;
-  }
-};
-
-const showWindowAfterCapture = async () => {
-  if (!window.electronAPI?.showMainWindow) {
-    return;
-  }
-  try {
-    await window.electronAPI.showMainWindow();
-  } catch (error) {
-    console.error('show window', error);
-  }
-};
-
-const updateUploadLink = async (filePath) => {
-  if (!filePath) {
-    uploadedLink.value = '';
-    linkStatus.value = '';
-    return;
-  }
-  if (!settingsForm.uploadToS3) {
-    uploadedLink.value = '';
-    linkStatus.value = '';
-    return;
-  }
-
-  try {
-    const { url, error } = await uploadService.upload(filePath);
-    if (url) {
-      uploadedLink.value = url;
-      linkStatus.value = t('capture.linkCopied');
-    } else {
-      uploadedLink.value = '';
-      linkStatus.value = error ? `${t('capture.linkUploadError')} ${error}` : t('capture.linkUploadFailed');
-    }
-  } catch (uploadError) {
-    uploadedLink.value = '';
-    linkStatus.value = `${t('capture.linkUploadError')} ${uploadError?.message || ''}`;
-  }
-};
-
-const copyUploadedLink = async () => {
-  if (!uploadedLink.value) {
-    return;
-  }
-  try {
-    await navigator.clipboard.writeText(uploadedLink.value);
-    linkStatus.value = t('capture.linkCopied');
-  } catch (error) {
-    console.error('clipboard copy', error);
-    linkStatus.value = `${t('capture.linkUploadError')} ${error?.message || ''}`;
-  }
-};
-
 const testS3Connection = async () => {
   if (!window.electronAPI?.checkS3Connection) {
     s3TestStatus.value = t('settings.s3TestUnavailable');
     return;
   }
 
-  ensureDomainEndpoint();
+  ensureDomainEndpoint(settingsForm);
 
   isS3Testing.value = true;
   s3TestStatus.value = t('settings.s3TestInProgress');
@@ -412,11 +286,6 @@ const testS3Connection = async () => {
   } finally {
     isS3Testing.value = false;
   }
-};
-
-const startRecording = () => {
-  // Заглушка для записи видео (пока только отображение статуса).
-  captureStatus.value = t('capture.recordingPlaceholder');
 };
 
 const openSettings = () => {
@@ -462,23 +331,6 @@ const actionHandlers = {
   settings: openSettings,
 };
 
-const buildHotkeyBindings = () => {
-  const bindings = {};
-  if (settingsForm.fullScreenCapture && settingsForm.hotkeyFullScreen?.trim()) {
-    bindings[settingsForm.hotkeyFullScreen.trim()] = 'fullscreen';
-  }
-  if (settingsForm.areaCapture && settingsForm.hotkeyArea?.trim()) {
-    bindings[settingsForm.hotkeyArea.trim()] = 'area';
-  }
-  if (settingsForm.videoCapture && settingsForm.hotkeyVideo?.trim()) {
-    bindings[settingsForm.hotkeyVideo.trim()] = 'record';
-  }
-  if (settingsForm.screenshotEditor && settingsForm.hotkeyEditor?.trim()) {
-    bindings[settingsForm.hotkeyEditor.trim()] = 'settings';
-  }
-  return bindings;
-};
-
 const handleAction = (key) => {
   // Вызываем обработчик для выбранного действия.
   actionHandlers[key]?.();
@@ -502,38 +354,6 @@ const handleAreaCancel = () => {
   currentPage.value = 'home';
   areaImage.value = '';
   captureStatus.value = t('capture.statusAreaCanceled');
-};
-
-const handleEditorSave = async (dataUrl) => {
-  // Сохраняем изображение из редактора и показываем превью.
-  currentPage.value = 'home';
-  isCapturing.value = true;
-  captureStatus.value = t('capture.statusSaving');
-
-  try {
-    const base64Payload = dataUrl.split(',')[1];
-    const result = await captureService.save(base64Payload, screenshotPath.value);
-    if (result?.filePath) {
-      screenshotPath.value = result.filePath;
-      await updateUploadLink(result.filePath);
-    }
-    previewUrl.value = dataUrl;
-    captureStatus.value = `${t('capture.statusSaved')} ${result.filePath}`;
-  } catch (error) {
-    console.error('editor save', error);
-    captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusUnknownError')}`;
-  } finally {
-    isCapturing.value = false;
-    editorImage.value = '';
-  }
-};
-
-const handleEditorCancel = () => {
-  // Закрываем редактор без сохранения.
-  currentPage.value = 'home';
-  captureStatus.value = t('capture.statusEditorCanceled');
-  isCapturing.value = false;
-  editorImage.value = '';
 };
 
 onMounted(() => {
