@@ -29,6 +29,18 @@
         class="img-fluid rounded border"
         alt="Preview screenshot"
       />
+      <div v-if="uploadedLink" class="d-flex flex-column align-items-center gap-2 mt-3">
+        <button
+          class="btn btn-outline-secondary btn-sm"
+          type="button"
+          :disabled="!uploadedLink"
+          @click="() => emit('copy-link')"
+        >
+          {{ copyLinkLabel }}
+        </button>
+        <p class="text-break small text-muted mb-0">{{ uploadedLink }}</p>
+      </div>
+      <p v-if="linkStatus" class="small text-muted mt-2">{{ linkStatus }}</p>
     </div>
   </section>
 </template>
@@ -41,6 +53,9 @@ const {
   isCapturing = false,
   captureStatus = '',
   previewUrl = '',
+  uploadedLink = '',
+  linkStatus = '',
+  copyLinkLabel = '',
 } = defineProps({
   actions: {
     type: Array,
@@ -58,7 +73,19 @@ const {
     type: String,
     default: '',
   },
+  uploadedLink: {
+    type: String,
+    default: '',
+  },
+  linkStatus: {
+    type: String,
+    default: '',
+  },
+  copyLinkLabel: {
+    type: String,
+    default: 'Copy link',
+  },
 });
 
-const emit = defineEmits(['run-action']);
+const emit = defineEmits(['run-action', 'copy-link']);
 </script>

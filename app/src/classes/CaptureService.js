@@ -4,8 +4,8 @@ export default class CaptureService {
     return window.electronAPI.captureScreenshot();
   }
 
-  async save(data) {
+  async save(data, filePath = '') {
     // Просит main процесc сохранить base64-представление изображения.
-    return window.electronAPI.saveScreenshot(data);
+    return window.electronAPI.saveScreenshot({ data, filePath });
   }
 }

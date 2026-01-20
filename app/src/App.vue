@@ -12,14 +12,18 @@
       @go-home="goHome"
     />
 
-    <HomeActions
-      v-if="currentPage === 'home'"
-      :actions="actions"
-      :is-capturing="isCapturing"
-      :capture-status="captureStatus"
-      :preview-url="previewUrl"
-      @run-action="handleAction"
-    />
+      <HomeActions
+        v-if="currentPage === 'home'"
+        :actions="actions"
+        :is-capturing="isCapturing"
+        :capture-status="captureStatus"
+        :preview-url="previewUrl"
+        :uploaded-link="uploadedLink"
+        :link-status="linkStatus"
+        :copy-link-label="t('capture.linkCopyButton')"
+        @run-action="handleAction"
+        @copy-link="copyUploadedLink"
+      />
 
     <AreaSelectionPage
       v-else-if="currentPage === 'area'"
@@ -33,19 +37,22 @@
       @cancel="handleAreaCancel"
     />
 
-    <SettingsForm
-      v-else-if="currentPage === 'settings'"
-      :settings-form="settingsForm"
-      :language="language"
-      :language-options="languageOptions"
-      :is-saving="isSaving"
-      :settings-status="settingsStatus"
-      :t="t"
-      @save-settings="saveSettings"
-      @update:language="handleLanguageUpdate"
-      @capture-hotkey="handleHotkeyCapture"
-      @select-save-folder="chooseSaveFolder"
-    />
+  <SettingsForm
+    v-else-if="currentPage === 'settings'"
+    :settings-form="settingsForm"
+    :language="language"
+    :language-options="languageOptions"
+    :is-saving="isSaving"
+    :settings-status="settingsStatus"
+    :t="t"
+    :is-s3-testing="isS3Testing"
+    :s3-test-status="s3TestStatus"
+    @save-settings="saveSettings"
+    @update:language="handleLanguageUpdate"
+    @capture-hotkey="handleHotkeyCapture"
+    @select-save-folder="chooseSaveFolder"
+    @check-s3-connection="testS3Connection"
+  />
 
     <ImageEditorPage
       v-else-if="currentPage === 'editor'"
@@ -77,12 +84,14 @@ import ImageEditorPage from './components/ImageEditorPage.vue';
 import LocalizationService from './classes/LocalizationService.js';
 import SettingsService from './classes/SettingsService.js';
 import CaptureService from './classes/CaptureService.js';
+import UploadService from './classes/UploadService.js';
 import translations from './lang/index.js';
 import uiConfig from './config/ui.js';
 
 const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
+const uploadService = new UploadService();
 
 // Возвращает шаблон структуры формы настроек.
 const createDefaultForm = () => ({
@@ -119,6 +128,27 @@ const currentPage = ref('home');
 const editorImage = ref('');
 const areaImage = ref('');
 let trayActionRemover = null;
+const screenshotPath = ref('');
+const uploadedLink = ref('');
+const linkStatus = ref('');
+const isS3Testing = ref(false);
+const s3TestStatus = ref('');
+
+const normalizeS3Endpoint = (value = '') => {
+  const trimmed = (value || '').trim();
+  if (!trimmed) {
+    return '';
+  }
+  const withoutProtocol = trimmed.replace(/^[a-z]+:\/\//i, '');
+  return withoutProtocol.replace(/\/.*$/, '');
+};
+
+const ensureDomainEndpoint = () => {
+  const normalized = normalizeS3Endpoint(settingsForm.s3Endpoint);
+  if (normalized !== settingsForm.s3Endpoint) {
+    settingsForm.s3Endpoint = normalized;
+  }
+};
 
 // При смене языка обновляем словарь и статусы.
 watch(language, (value) => {
@@ -221,6 +251,8 @@ const saveSettings = async () => {
   settingsStatus.value = t('settings.statusSaving');
   isSaving.value = true;
 
+  ensureDomainEndpoint();
+
   try {
     await settingsService.save(gatherPayload());
     settingsStatus.value = t('settings.statusSaved');
@@ -255,13 +287,22 @@ const captureFullScreen = async () => {
   isCapturing.value = true;
   previewUrl.value = '';
 
-    try {
-      const base64 = await captureService.capture();
-      editorImage.value = `data:image/png;base64,${base64}`;
-      currentPage.value = 'editor';
-      captureStatus.value = t('capture.statusEditorOpen');
-      await showWindowAfterCapture();
-    } catch (error) {
+  try {
+    const base64 = await captureService.capture();
+    editorImage.value = `data:image/png;base64,${base64}`;
+    currentPage.value = 'editor';
+    captureStatus.value = t('capture.statusEditorOpen');
+
+    const saved = await captureService.save(base64);
+    if (saved?.filePath) {
+      screenshotPath.value = saved.filePath;
+      await updateUploadLink(saved.filePath);
+    } else {
+      captureStatus.value = t('capture.statusNoPath');
+    }
+
+    await showWindowAfterCapture();
+  } catch (error) {
     console.error('capture', error);
     captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusUnknownError')}`;
     previewUrl.value = '';
@@ -276,12 +317,21 @@ const captureArea = async () => {
   isCapturing.value = true;
   previewUrl.value = '';
 
-    try {
-      const base64 = await captureService.capture();
-      areaImage.value = `data:image/png;base64,${base64}`;
-      currentPage.value = 'area';
-      await showWindowAfterCapture();
-    } catch (error) {
+  try {
+    const base64 = await captureService.capture();
+    areaImage.value = `data:image/png;base64,${base64}`;
+    currentPage.value = 'area';
+
+    const saved = await captureService.save(base64);
+    if (saved?.filePath) {
+      screenshotPath.value = saved.filePath;
+      await updateUploadLink(saved.filePath);
+    } else {
+      captureStatus.value = t('capture.statusNoPath');
+    }
+
+    await showWindowAfterCapture();
+  } catch (error) {
     console.error('capture area', error);
     captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusAreaError')}`;
   } finally {
@@ -297,6 +347,73 @@ const showWindowAfterCapture = async () => {
     await window.electronAPI.showMainWindow();
   } catch (error) {
     console.error('show window', error);
+  }
+};
+
+const updateUploadLink = async (filePath) => {
+  if (!filePath) {
+    uploadedLink.value = '';
+    linkStatus.value = '';
+    return;
+  }
+  if (!settingsForm.uploadToS3) {
+    uploadedLink.value = '';
+    linkStatus.value = '';
+    return;
+  }
+
+  try {
+    const { url, error } = await uploadService.upload(filePath);
+    if (url) {
+      uploadedLink.value = url;
+      linkStatus.value = t('capture.linkCopied');
+    } else {
+      uploadedLink.value = '';
+      linkStatus.value = error ? `${t('capture.linkUploadError')} ${error}` : t('capture.linkUploadFailed');
+    }
+  } catch (uploadError) {
+    uploadedLink.value = '';
+    linkStatus.value = `${t('capture.linkUploadError')} ${uploadError?.message || ''}`;
+  }
+};
+
+const copyUploadedLink = async () => {
+  if (!uploadedLink.value) {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(uploadedLink.value);
+    linkStatus.value = t('capture.linkCopied');
+  } catch (error) {
+    console.error('clipboard copy', error);
+    linkStatus.value = `${t('capture.linkUploadError')} ${error?.message || ''}`;
+  }
+};
+
+const testS3Connection = async () => {
+  if (!window.electronAPI?.checkS3Connection) {
+    s3TestStatus.value = t('settings.s3TestUnavailable');
+    return;
+  }
+
+  ensureDomainEndpoint();
+
+  isS3Testing.value = true;
+  s3TestStatus.value = t('settings.s3TestInProgress');
+  try {
+    const result = await window.electronAPI.checkS3Connection();
+    if (result?.success) {
+      s3TestStatus.value = t('settings.s3TestSuccess');
+    } else if (result?.errorCode === 'NOT_CONFIGURED') {
+      s3TestStatus.value = t('settings.s3NotConfigured');
+    } else {
+      const errorMessage = (result?.error || '').trim();
+      s3TestStatus.value = `${t('settings.s3TestFailed')} ${errorMessage}`.trim();
+    }
+  } catch (error) {
+    s3TestStatus.value = `${t('settings.s3TestFailed')} ${error?.message || ''}`.trim();
+  } finally {
+    isS3Testing.value = false;
   }
 };
 
@@ -395,7 +512,11 @@ const handleEditorSave = async (dataUrl) => {
 
   try {
     const base64Payload = dataUrl.split(',')[1];
-    const result = await captureService.save(base64Payload);
+    const result = await captureService.save(base64Payload, screenshotPath.value);
+    if (result?.filePath) {
+      screenshotPath.value = result.filePath;
+      await updateUploadLink(result.filePath);
+    }
     previewUrl.value = dataUrl;
     captureStatus.value = `${t('capture.statusSaved')} ${result.filePath}`;
   } catch (error) {

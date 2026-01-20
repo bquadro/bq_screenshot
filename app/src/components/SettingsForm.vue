@@ -169,21 +169,32 @@
                   :placeholder="t('settings.placeholderS3SecretKey')"
                 />
               </div>
-              <div class="col-12 col-md-6">
-                <div class="form-check mt-3">
-                  <input class="form-check-input" type="checkbox" v-model="settingsForm.s3UseSsl" />
-                  <label class="form-check-label">
-                    {{ t('settings.s3UseSsl') }}
-                  </label>
-                </div>
+            <div class="col-12 col-md-6">
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" v-model="settingsForm.s3UseSsl" />
+                <label class="form-check-label">
+                  {{ t('settings.s3UseSsl') }}
+                </label>
               </div>
             </div>
-          </section>
-
-          <div class="d-flex flex-wrap align-items-center gap-3">
-            <button class="btn btn-primary" type="submit" :disabled="isSaving">
-              {{ t('settings.saveButton') }}
+          </div>
+          <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+            <button
+              class="btn btn-outline-primary btn-sm"
+              type="button"
+              :disabled="isSaving || isS3Testing"
+              @click="$emit('check-s3-connection')"
+            >
+              {{ t('settings.s3TestButton') }}
             </button>
+            <span class="small text-muted">{{ s3TestStatus }}</span>
+          </div>
+        </section>
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <button class="btn btn-primary" type="submit" :disabled="isSaving">
+            {{ t('settings.saveButton') }}
+          </button>
             <p class="mb-0 text-muted small">{{ settingsStatus }}</p>
           </div>
         </form>
@@ -202,6 +213,8 @@ const {
   isSaving,
   settingsStatus,
   t,
+  isS3Testing,
+  s3TestStatus,
 } = defineProps({
   settingsForm: {
     type: Object,
@@ -227,9 +240,17 @@ const {
     type: Function,
     required: true,
   },
+  isS3Testing: {
+    type: Boolean,
+    default: false,
+  },
+  s3TestStatus: {
+    type: String,
+    default: '',
+  },
 });
 
-const emit = defineEmits(['save-settings', 'update:language', 'capture-hotkey', 'select-save-folder']);
+const emit = defineEmits(['save-settings', 'update:language', 'capture-hotkey', 'select-save-folder', 'check-s3-connection']);
 
 const updateLanguage = (event) => emit('update:language', event.target.value);
 const triggerHotkeyCapture = (field) => emit('capture-hotkey', field);

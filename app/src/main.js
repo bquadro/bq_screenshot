@@ -5,6 +5,7 @@ import SettingsStorage from './classes/SettingsStorage.js';
 import IpcHandlers from './classes/IpcHandlers.js';
 import TrayController from './classes/TrayController.js';
 import GlobalHotkeyController from './classes/GlobalHotkeyController.js';
+import UploadController from './classes/UploadController.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,7 +55,8 @@ const createMainWindow = () => {
 };
 
 const settingsStorage = new SettingsStorage(app);
-const ipcHandlers = new IpcHandlers(app, settingsStorage);
+const uploadController = new UploadController(settingsStorage);
+const ipcHandlers = new IpcHandlers(app, settingsStorage, uploadController);
 ipcHandlers.register();
 
 ipcMain.handle('register-global-hotkeys', async (_event, bindings) => {

@@ -28,11 +28,13 @@ const onTrayAction = (callback) => {
 contextBridge.exposeInMainWorld('electronAPI', {
   getElectronVersion: () => process.versions.electron,
   captureScreenshot,
-  saveScreenshot: (data) => ipcRenderer.invoke('save-screenshot', { data }),
+  saveScreenshot: ({ data, filePath }) => ipcRenderer.invoke('save-screenshot', { data, filePath }),
   loadSettings: () => ipcRenderer.invoke('load-settings'),
   saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
   selectSaveFolder: () => ipcRenderer.invoke('choose-save-folder'),
   onTrayAction,
   registerGlobalHotkeys: (bindings) => ipcRenderer.invoke('register-global-hotkeys', bindings),
   showMainWindow: () => ipcRenderer.invoke('show-main-window'),
+  uploadScreenshot: (filePath) => ipcRenderer.invoke('upload-screenshot', filePath),
+  checkS3Connection: () => ipcRenderer.invoke('check-s3-connection'),
 });

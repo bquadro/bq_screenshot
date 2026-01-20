@@ -4,10 +4,11 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import screenshot from 'screenshot-desktop';
 
 export default class IpcHandlers {
-  constructor(appInstance, settingsStorage) {
+  constructor(appInstance, settingsStorage, uploadController) {
     // Сохраняем зависимости и рассчитываем дефолтную папку сразу.
     this.app = appInstance;
     this.settingsStorage = settingsStorage;
+    this.uploadController = uploadController;
     this.fallbackFolder = this.getFallbackFolder();
   }
 
@@ -23,6 +24,8 @@ export default class IpcHandlers {
     ipcMain.handle('capture-screenshot', () => this.handleCaptureScreenshot());
     ipcMain.handle('choose-save-folder', () => this.handleChooseSaveFolder());
     ipcMain.handle('save-screenshot', (_event, payload) => this.handleSaveScreenshot(payload));
+    ipcMain.handle('upload-screenshot', (_event, filePath) => this.handleUploadScreenshot(filePath));
+    ipcMain.handle('check-s3-connection', () => this.handleCheckS3Connection());
   }
 
   async handleCaptureScreenshot() {
@@ -63,12 +66,29 @@ export default class IpcHandlers {
     const settings = await this.settingsStorage.load();
     const configuredFolder = settings.storage?.folder?.trim() || this.fallbackFolder;
     const targetFolder = path.resolve(configuredFolder);
-    const fileName = `bq-screenshot-${Date.now()}.png`;
-    const filePath = path.join(targetFolder, fileName);
+    let filePath = payload.filePath?.trim();
+    if (!filePath) {
+      const fileName = `bq-screenshot-${Date.now()}.png`;
+      filePath = path.join(targetFolder, fileName);
+    }
 
-    await mkdir(targetFolder, { recursive: true });
+    await mkdir(path.dirname(filePath), { recursive: true });
     await writeFile(filePath, screenshotBuffer);
 
     return { canceled: false, filePath };
+  }
+
+  async handleUploadScreenshot(filePath) {
+    if (!this.uploadController) {
+      return { url: null };
+    }
+    return this.uploadController.upload(filePath);
+  }
+
+  async handleCheckS3Connection() {
+    if (!this.uploadController) {
+      return { success: false, errorCode: 'MISSING_CONTROLLER', error: 'Upload controller unavailable.' };
+    }
+    return this.uploadController.checkConnection();
   }
 }
