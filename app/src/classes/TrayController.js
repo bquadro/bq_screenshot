@@ -47,21 +47,18 @@ export default class TrayController {
       {
         label: 'Скриншот экрана',
         click: () => {
-          this.showWindow();
           this.sendAction('fullscreen');
         },
       },
       {
         label: 'Скриншот области',
         click: () => {
-          this.showWindow();
           this.sendAction('area');
         },
       },
       {
         label: 'Запись видео',
         click: () => {
-          this.showWindow();
           this.sendAction('record');
         },
       },
@@ -69,7 +66,6 @@ export default class TrayController {
       {
         label: 'Настройки',
         click: () => {
-          this.showWindow();
           this.sendAction('settings');
         },
       },

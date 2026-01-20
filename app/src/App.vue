@@ -77,14 +77,12 @@ import ImageEditorPage from './components/ImageEditorPage.vue';
 import LocalizationService from './classes/LocalizationService.js';
 import SettingsService from './classes/SettingsService.js';
 import CaptureService from './classes/CaptureService.js';
-import HotkeyController from './classes/HotkeyController.js';
 import translations from './lang/index.js';
 import uiConfig from './config/ui.js';
 
 const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
-const hotkeyController = new HotkeyController();
 
 // Возвращает шаблон структуры формы настроек.
 const createDefaultForm = () => ({
@@ -161,7 +159,10 @@ const applyLoadedSettings = (loaded) => {
 };
 
 const registerHotkeys = () => {
-  hotkeyController.register(buildHotkeyBindings());
+  const bindings = buildHotkeyBindings();
+  if (window.electronAPI?.registerGlobalHotkeys) {
+    window.electronAPI.registerGlobalHotkeys(bindings);
+  }
 };
 
 const gatherPayload = () => ({
@@ -254,12 +255,13 @@ const captureFullScreen = async () => {
   isCapturing.value = true;
   previewUrl.value = '';
 
-  try {
-    const base64 = await captureService.capture();
-    editorImage.value = `data:image/png;base64,${base64}`;
-    currentPage.value = 'editor';
-    captureStatus.value = t('capture.statusEditorOpen');
-  } catch (error) {
+    try {
+      const base64 = await captureService.capture();
+      editorImage.value = `data:image/png;base64,${base64}`;
+      currentPage.value = 'editor';
+      captureStatus.value = t('capture.statusEditorOpen');
+      await showWindowAfterCapture();
+    } catch (error) {
     console.error('capture', error);
     captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusUnknownError')}`;
     previewUrl.value = '';
@@ -274,15 +276,27 @@ const captureArea = async () => {
   isCapturing.value = true;
   previewUrl.value = '';
 
-  try {
-    const base64 = await captureService.capture();
-    areaImage.value = `data:image/png;base64,${base64}`;
-    currentPage.value = 'area';
-  } catch (error) {
+    try {
+      const base64 = await captureService.capture();
+      areaImage.value = `data:image/png;base64,${base64}`;
+      currentPage.value = 'area';
+      await showWindowAfterCapture();
+    } catch (error) {
     console.error('capture area', error);
     captureStatus.value = `${t('capture.statusError')} ${error?.message || t('capture.statusAreaError')}`;
   } finally {
     isCapturing.value = false;
+  }
+};
+
+const showWindowAfterCapture = async () => {
+  if (!window.electronAPI?.showMainWindow) {
+    return;
+  }
+  try {
+    await window.electronAPI.showMainWindow();
+  } catch (error) {
+    console.error('show window', error);
   }
 };
 
@@ -334,16 +348,16 @@ const actionHandlers = {
 const buildHotkeyBindings = () => {
   const bindings = {};
   if (settingsForm.fullScreenCapture && settingsForm.hotkeyFullScreen?.trim()) {
-    bindings[settingsForm.hotkeyFullScreen.trim()] = captureFullScreen;
+    bindings[settingsForm.hotkeyFullScreen.trim()] = 'fullscreen';
   }
   if (settingsForm.areaCapture && settingsForm.hotkeyArea?.trim()) {
-    bindings[settingsForm.hotkeyArea.trim()] = captureArea;
+    bindings[settingsForm.hotkeyArea.trim()] = 'area';
   }
   if (settingsForm.videoCapture && settingsForm.hotkeyVideo?.trim()) {
-    bindings[settingsForm.hotkeyVideo.trim()] = startRecording;
+    bindings[settingsForm.hotkeyVideo.trim()] = 'record';
   }
   if (settingsForm.screenshotEditor && settingsForm.hotkeyEditor?.trim()) {
-    bindings[settingsForm.hotkeyEditor.trim()] = openSettings;
+    bindings[settingsForm.hotkeyEditor.trim()] = 'settings';
   }
   return bindings;
 };
@@ -415,7 +429,6 @@ onBeforeUnmount(() => {
   if (trayActionRemover) {
     trayActionRemover();
   }
-  hotkeyController.dispose();
 });
 
 </script>

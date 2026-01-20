@@ -33,4 +33,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
   selectSaveFolder: () => ipcRenderer.invoke('choose-save-folder'),
   onTrayAction,
+  registerGlobalHotkeys: (bindings) => ipcRenderer.invoke('register-global-hotkeys', bindings),
+  showMainWindow: () => ipcRenderer.invoke('show-main-window'),
 });
