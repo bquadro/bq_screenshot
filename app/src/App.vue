@@ -84,6 +84,7 @@ const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
 
+// Возвращает шаблон структуры формы настроек.
 const createDefaultForm = () => ({
   fullScreenCapture: true,
   areaCapture: true,
@@ -118,19 +119,23 @@ const currentPage = ref('home');
 const editorImage = ref('');
 const areaImage = ref('');
 
+// При смене языка обновляем словарь и статусы.
 watch(language, (value) => {
   localizationService.setLanguage(value);
   settingsStatus.value = localizationService.t('settings.statusLoaded');
   captureStatus.value = localizationService.t('capture.statusInitial');
 });
 
+// Обновляет выбранный язык.
 const handleLanguageUpdate = (value) => {
   language.value = value;
 };
 
+// Удобный доступ к переводу по ключу.
 const t = (key) => localizationService.t(key);
 
 const applyLoadedSettings = (loaded) => {
+  // Применяем загруженные значения настроек к форме.
   settingsForm.fullScreenCapture = Boolean(loaded.screenshots?.fullScreen);
   settingsForm.areaCapture = Boolean(loaded.screenshots?.area);
   settingsForm.videoCapture = Boolean(loaded.videoCapture?.enabled);
@@ -152,6 +157,7 @@ const applyLoadedSettings = (loaded) => {
 };
 
 const gatherPayload = () => ({
+  // Собираем объект настроек для сохранения.
   screenshots: {
     fullScreen: settingsForm.fullScreenCapture,
     area: settingsForm.areaCapture,
@@ -188,6 +194,7 @@ const gatherPayload = () => ({
 });
 
 const loadSettings = async () => {
+  // Загружаем настройки из main-процесса и обновляем UI.
   settingsStatus.value = t('settings.statusLoading');
 
   try {
@@ -201,6 +208,7 @@ const loadSettings = async () => {
 };
 
 const saveSettings = async () => {
+  // Сохраняем текущие значения формы как настройки.
   settingsStatus.value = t('settings.statusSaving');
   isSaving.value = true;
 
@@ -216,6 +224,7 @@ const saveSettings = async () => {
 };
 
 const chooseSaveFolder = async () => {
+  // Открываем диалог выбора папки и записываем результат в форму.
   try {
     const folder = await settingsService.selectFolder();
     if (folder) {
@@ -231,6 +240,7 @@ const chooseSaveFolder = async () => {
 };
 
 const captureFullScreen = async () => {
+  // Делаем полноэкранный скриншот и открываем редактор.
   captureStatus.value = t('capture.statusSaving');
   isCapturing.value = true;
   previewUrl.value = '';
@@ -250,6 +260,7 @@ const captureFullScreen = async () => {
 };
 
 const captureArea = async () => {
+  // Захватываем скриншот области и показываем страницу выбора.
   captureStatus.value = t('capture.areaSelecting');
   isCapturing.value = true;
   previewUrl.value = '';
@@ -267,19 +278,23 @@ const captureArea = async () => {
 };
 
 const startRecording = () => {
+  // Заглушка для записи видео (пока только отображение статуса).
   captureStatus.value = t('capture.recordingPlaceholder');
 };
 
 const openSettings = () => {
+  // Переходим на страницу настроек.
   settingsStatus.value = t('settings.openingPanel');
   currentPage.value = 'settings';
 };
 
 const goHome = () => {
+  // Возвращаемся на главную страницу.
   currentPage.value = 'home';
 };
 
 const actions = computed(() => [
+  // Список доступных действий на главной странице.
   {
     key: 'fullscreen',
     buttonLabel: t('capture.fullscreenButton'),
@@ -307,14 +322,17 @@ const actionHandlers = {
 };
 
 const handleAction = (key) => {
+  // Вызываем обработчик для выбранного действия.
   actionHandlers[key]?.();
 };
 
 const handleHotkeyCapture = () => {
+  // Уведомляем, что захват горячими клавишами недоступен.
   settingsStatus.value = t('settings.hotkeysDisabled');
 };
 
 const handleAreaCrop = (dataUrl) => {
+  // Получили результат кадрирования и отправляем в редактор.
   editorImage.value = dataUrl;
   areaImage.value = '';
   currentPage.value = 'editor';
@@ -322,12 +340,14 @@ const handleAreaCrop = (dataUrl) => {
 };
 
 const handleAreaCancel = () => {
+  // Отменили выделение области, возвращаемся домой.
   currentPage.value = 'home';
   areaImage.value = '';
   captureStatus.value = t('capture.statusAreaCanceled');
 };
 
 const handleEditorSave = async (dataUrl) => {
+  // Сохраняем изображение из редактора и показываем превью.
   currentPage.value = 'home';
   isCapturing.value = true;
   captureStatus.value = t('capture.statusSaving');
@@ -347,6 +367,7 @@ const handleEditorSave = async (dataUrl) => {
 };
 
 const handleEditorCancel = () => {
+  // Закрываем редактор без сохранения.
   currentPage.value = 'home';
   captureStatus.value = t('capture.statusEditorCanceled');
   isCapturing.value = false;

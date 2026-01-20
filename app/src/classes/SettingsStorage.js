@@ -3,14 +3,17 @@ import { writeFile, readFile, mkdir } from 'node:fs/promises';
 
 export default class SettingsStorage {
   constructor(appInstance) {
+    // Храним ссылку на экземпляр app для доступа к путям.
     this.app = appInstance;
   }
 
   getFilePath() {
+    // Возвращаем путь к файлу settings.json внутри userData.
     return path.join(this.app.getPath('userData'), 'settings.json');
   }
 
   createDefaultSettings() {
+    // Отдаём полный набор стандартных значений настроек.
     return {
       screenshots: {
         fullScreen: true,
@@ -49,6 +52,7 @@ export default class SettingsStorage {
   }
 
   mergeSettings(defaults, incoming = {}) {
+    // Объединяем пользовательские значения с дефолтами рекурсивно.
     return {
       ...defaults,
       ...incoming,
@@ -64,6 +68,7 @@ export default class SettingsStorage {
   }
 
   async load() {
+    // Загружаем настройки из файла, если они есть, иначе возвращаем дефолты.
     const defaults = this.createDefaultSettings();
     try {
       const raw = await readFile(this.getFilePath(), 'utf8');
@@ -75,6 +80,7 @@ export default class SettingsStorage {
   }
 
   async save(payload) {
+    // Сохраняем нормализованные настройки в файл settings.json.
     const normalized = this.mergeSettings(this.createDefaultSettings(), payload);
     await mkdir(path.dirname(this.getFilePath()), { recursive: true });
     await writeFile(this.getFilePath(), JSON.stringify(normalized, null, 2), 'utf8');

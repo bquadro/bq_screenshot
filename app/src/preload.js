@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+// Делает скриншот используя main-процесс и возвращает base64.
 const captureScreenshot = async () => {
   const buffer = await ipcRenderer.invoke('capture-screenshot');
   if (!buffer) {
