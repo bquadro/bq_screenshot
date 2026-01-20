@@ -10,6 +10,21 @@ const captureScreenshot = async () => {
   return Buffer.from(buffer).toString('base64');
 };
 
+const onTrayAction = (callback) => {
+  if (typeof callback !== 'function') {
+    return () => {};
+  }
+
+  const listener = (_event, action) => {
+    callback(action);
+  };
+
+  ipcRenderer.on('tray-action', listener);
+  return () => {
+    ipcRenderer.removeListener('tray-action', listener);
+  };
+};
+
 contextBridge.exposeInMainWorld('electronAPI', {
   getElectronVersion: () => process.versions.electron,
   captureScreenshot,
@@ -17,4 +32,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadSettings: () => ipcRenderer.invoke('load-settings'),
   saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),
   selectSaveFolder: () => ipcRenderer.invoke('choose-save-folder'),
+  onTrayAction,
 });

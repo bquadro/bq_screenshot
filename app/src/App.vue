@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch, onMounted, computed } from 'vue';
+import { reactive, ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 import AppHeader from './components/AppHeader.vue';
 import HomeActions from './components/HomeActions.vue';
 import SettingsForm from './components/SettingsForm.vue';
@@ -118,6 +118,7 @@ const languageOptions = ['ru', 'en'];
 const currentPage = ref('home');
 const editorImage = ref('');
 const areaImage = ref('');
+let trayActionRemover = null;
 
 // При смене языка обновляем словарь и статусы.
 watch(language, (value) => {
@@ -319,6 +320,7 @@ const actionHandlers = {
   fullscreen: captureFullScreen,
   area: captureArea,
   record: startRecording,
+  settings: openSettings,
 };
 
 const handleAction = (key) => {
@@ -378,6 +380,15 @@ onMounted(() => {
   loadSettings();
   if (window.electronAPI) {
     electronVersion.value = window.electronAPI.getElectronVersion();
+    if (window.electronAPI.onTrayAction) {
+      trayActionRemover = window.electronAPI.onTrayAction(handleAction);
+    }
+  }
+});
+
+onBeforeUnmount(() => {
+  if (trayActionRemover) {
+    trayActionRemover();
   }
 });
 

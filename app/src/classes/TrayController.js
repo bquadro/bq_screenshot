@@ -1,0 +1,96 @@
+import { Menu, Tray, nativeImage } from 'electron';
+
+const TRAY_ICON_DATA_URL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACTSURBVHgBpZKBCYAgEEV/TeAIjuIIbdQIuUGt0CS1gW1iZ2jIVaTnhw+Cvs8/OYDJA4Y8kR3ZR2/kmazxJbpUEfQ/Dm/UG7wVwHkjlQdMFfDdJMFaACebnjJGyDWgcnZu1/lrCrl6NCoEHJBrDwEr5NrT6ko/UV8xdLAC2N49mlc5CylpYh8wCwqrvbBGLoKGvz8Bfq0QPWEUo/EAAAAASUVORK5CYII=';
+
+export default class TrayController {
+  constructor(appInstance, getWindow) {
+    this.app = appInstance;
+    this.getWindow = getWindow;
+    this.tray = null;
+    this.icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
+    if (process.platform === 'darwin') {
+      this.icon.setTemplateImage(true);
+    }
+  }
+
+  ensure() {
+    if (this.tray) {
+      return;
+    }
+
+    this.tray = new Tray(this.icon);
+    this.tray.setToolTip('bq screenshot');
+    this.tray.setContextMenu(this.buildMenu());
+    this.tray.on('double-click', () => this.showWindow());
+  }
+
+  buildMenu() {
+    return Menu.buildFromTemplate([
+      {
+        label: 'Скриншот экрана',
+        click: () => {
+          this.showWindow();
+          this.sendAction('fullscreen');
+        },
+      },
+      {
+        label: 'Скриншот области',
+        click: () => {
+          this.showWindow();
+          this.sendAction('area');
+        },
+      },
+      {
+        label: 'Запись видео',
+        click: () => {
+          this.showWindow();
+          this.sendAction('record');
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Настройки',
+        click: () => {
+          this.showWindow();
+          this.sendAction('settings');
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Закрыть приложение',
+        click: () => {
+          this.app.quit();
+        },
+      },
+    ]);
+  }
+
+  showWindow() {
+    const win = this.getWindow();
+    if (!win) {
+      return;
+    }
+    if (win.isMinimized()) {
+      win.restore();
+    }
+    win.show();
+    win.focus();
+  }
+
+  sendAction(action) {
+    const win = this.getWindow();
+    if (!win?.webContents) {
+      return;
+    }
+    win.webContents.send('tray-action', action);
+  }
+
+  destroy() {
+    if (!this.tray) {
+      return;
+    }
+    this.tray.destroy();
+    this.tray = null;
+  }
+}

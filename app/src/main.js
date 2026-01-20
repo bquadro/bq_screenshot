@@ -3,13 +3,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import SettingsStorage from './classes/SettingsStorage.js';
 import IpcHandlers from './classes/IpcHandlers.js';
+import TrayController from './classes/TrayController.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Создаёт главное окно и загружает туда рендерерный контент.
+let mainWindow;
+let quitRequested = false;
+const trayController = new TrayController(app, () => mainWindow);
+
 const createMainWindow = () => {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
     webPreferences: {
@@ -25,24 +29,46 @@ const createMainWindow = () => {
   }
 
   mainWindow.setMenu(null);
+
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault();
+    trayController.ensure();
+    mainWindow.hide();
+  });
+
+  mainWindow.on('close', (event) => {
+    if (quitRequested || process.platform === 'darwin') {
+      return;
+    }
+    event.preventDefault();
+    trayController.ensure();
+    mainWindow.hide();
+  });
 };
 
 const settingsStorage = new SettingsStorage(app);
 const ipcHandlers = new IpcHandlers(app, settingsStorage);
 ipcHandlers.register();
 
-// Инициализация приложения: открываем окно и настраиваем поведение активации.
 app.whenReady().then(() => {
+  trayController.ensure();
   createMainWindow();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow();
+    } else if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
     }
   });
 });
 
-// Завершаем приложение на не-macOS после закрытия всех окон.
+app.on('before-quit', () => {
+  quitRequested = true;
+  trayController.destroy();
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
