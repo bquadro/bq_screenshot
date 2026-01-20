@@ -2,28 +2,25 @@
   <main class="container-xl d-flex flex-column min-vh-100">
     <AppHeader
       :logo-path="uiConfig.logoPath"
-      :title="uiConfig.title"
-      :description="t('app.description')"
       :current-page="currentPage"
+      :actions="actions"
       :settings-label="t('header.settingsButton')"
       :back-label="t('header.backButton')"
       :status="settingsStatus"
       @open-settings="openSettings"
       @go-home="goHome"
+      @run-action="handleAction"
     />
 
-      <HomeActions
-        v-if="currentPage === 'home'"
-        :actions="actions"
-        :is-capturing="isCapturing"
-        :capture-status="captureStatus"
-        :preview-url="previewUrl"
-        :uploaded-link="uploadedLink"
-        :link-status="linkStatus"
-        :copy-link-label="t('capture.linkCopyButton')"
-        @run-action="handleAction"
-        @copy-link="copyUploadedLink"
-      />
+    <HomeActions
+      v-if="currentPage === 'home'"
+      :capture-status="captureStatus"
+      :preview-url="previewUrl"
+      :uploaded-link="uploadedLink"
+      :link-status="linkStatus"
+      :copy-link-label="t('capture.linkCopyButton')"
+      @copy-link="copyUploadedLink"
+    />
 
     <AreaSelectionPage
       v-else-if="currentPage === 'area'"
@@ -440,18 +437,21 @@ const actions = computed(() => [
     buttonLabel: t('capture.fullscreenButton'),
     title: t('capture.fullscreenButton'),
     subtitle: t('capture.cardSubtitle'),
+    icon: 'fullscreen',
   },
   {
     key: 'area',
     buttonLabel: t('actions.areaButton'),
     title: t('actions.areaButton'),
     subtitle: t('actions.areaSubtitle'),
+    icon: 'area',
   },
   {
     key: 'record',
     buttonLabel: t('actions.recordButton'),
     title: t('actions.recordButton'),
     subtitle: t('actions.recordSubtitle'),
+    icon: 'record',
   },
 ]);
 
