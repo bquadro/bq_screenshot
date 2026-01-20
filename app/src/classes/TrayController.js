@@ -1,14 +1,31 @@
 import { Menu, Tray, nativeImage } from 'electron';
+import path from 'node:path';
+import { existsSync } from 'node:fs';
+
+const PLATFORM_DIRECTION = {
+  darwin: 'tray-mac.png',
+  win32: 'tray-windows.png',
+  linux: 'tray-linux.png',
+};
+
+const FALLBACK_ICON_PATHS = [
+  path.join(__dirname, '..', '..', '.vite', 'build', 'assets'),
+  path.join(__dirname, '..', '..', '.vite', 'assets'),
+  path.join(__dirname, '..', 'assets'),
+];
 
 const TRAY_ICON_DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACTSURBVHgBpZKBCYAgEEV/TeAIjuIIbdQIuUGt0CS1gW1iZ2jIVaTnhw+Cvs8/OYDJA4Y8kR3ZR2/kmazxJbpUEfQ/Dm/UG7wVwHkjlQdMFfDdJMFaACebnjJGyDWgcnZu1/lrCrl6NCoEHJBrDwEr5NrT6ko/UV8xdLAC2N49mlc5CylpYh8wCwqrvbBGLoKGvz8Bfq0QPWEUo/EAAAAASUVORK5CYII=';
-
 export default class TrayController {
   constructor(appInstance, getWindow) {
     this.app = appInstance;
     this.getWindow = getWindow;
     this.tray = null;
-    this.icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
+    const iconPath = this.resolveIconPath();
+    this.icon = iconPath ? nativeImage.createFromPath(iconPath) : nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
+    if (this.icon.isEmpty()) {
+      this.icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
+    }
     if (process.platform === 'darwin') {
       this.icon.setTemplateImage(true);
     }
@@ -105,5 +122,20 @@ export default class TrayController {
     }
     this.tray.destroy();
     this.tray = null;
+  }
+
+  resolveIconPath() {
+    const iconName = PLATFORM_DIRECTION[process.platform] || PLATFORM_DIRECTION.linux;
+    if (!iconName) {
+      return null;
+    }
+    for (const base of FALLBACK_ICON_PATHS) {
+      for (const suffix of [path.join(base, iconName)]) {
+        if (existsSync(suffix)) {
+          return suffix;
+        }
+      }
+    }
+    return null;
   }
 }
