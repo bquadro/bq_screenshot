@@ -26,9 +26,6 @@ export default class TrayController {
     if (this.icon.isEmpty()) {
       this.icon = nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
     }
-    if (process.platform === 'darwin') {
-      this.icon.setTemplateImage(true);
-    }
   }
 
   ensure() {
