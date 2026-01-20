@@ -75,6 +75,10 @@ ipcMain.handle('show-main-window', () => {
   mainWindow.focus();
 });
 
+ipcMain.handle('set-tray-recording', (_event, isRecording) => {
+  trayController.setRecordingState(Boolean(isRecording));
+});
+
 app.whenReady().then(() => {
   trayController.ensure();
   createMainWindow();

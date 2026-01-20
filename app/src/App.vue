@@ -82,6 +82,7 @@ import LocalizationService from './classes/LocalizationService.js';
 import SettingsService from './classes/SettingsService.js';
 import CaptureService from './classes/CaptureService.js';
 import UploadService from './classes/UploadService.js';
+import VideoService from './classes/VideoService.js';
 import translations from './lang/index.js';
 import uiConfig from './config/ui.js';
 import {
@@ -93,11 +94,14 @@ import {
 import { useUploadLink } from './modules/uploadLink.js';
 import { createCaptureActions } from './modules/captureActions.js';
 import { ensureDomainEndpoint } from './modules/s3Utils.js';
+import VideoRecorder from './modules/videoRecorder.js';
 
 const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
 const uploadService = new UploadService();
+const videoService = new VideoService();
+const videoRecorder = new VideoRecorder();
 
 const settingsForm = reactive(createDefaultForm());
 const settingsStatus = ref(localizationService.t('settings.statusNotLoaded'));
@@ -118,6 +122,17 @@ const uploadedLink = ref('');
 const linkStatus = ref('');
 const isS3Testing = ref(false);
 const s3TestStatus = ref('');
+const isRecording = ref(false);
+
+const arrayBufferToBase64 = (buffer) => {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return window.btoa(binary);
+};
 
 // При смене языка обновляем словарь и статусы.
 watch(language, (value) => {
@@ -147,7 +162,6 @@ const {
   captureArea,
   handleEditorSave,
   handleEditorCancel,
-  startRecording,
 } = createCaptureActions({
   captureService,
   settingsForm,
@@ -261,6 +275,55 @@ const chooseSaveFolder = async () => {
   }
 };
 
+const updateTrayRecording = (value) => {
+  if (window.electronAPI?.setTrayRecordingState) {
+    window.electronAPI.setTrayRecordingState(value);
+  }
+};
+
+const startVideoRecording = async () => {
+  captureStatus.value = t('capture.statusRecording');
+  try {
+    await videoRecorder.start();
+    isRecording.value = true;
+    updateTrayRecording(true);
+  } catch (error) {
+    captureStatus.value = `${t('capture.videoSaveError')} ${error?.message || ''}`.trim();
+    isRecording.value = false;
+    updateTrayRecording(false);
+  }
+};
+
+const stopVideoRecording = async () => {
+  if (!isRecording.value) {
+    return;
+  }
+  try {
+    const blob = await videoRecorder.stop();
+    if (!blob) {
+      captureStatus.value = t('capture.videoSaveError');
+      return;
+    }
+    const arrayBuffer = await blob.arrayBuffer();
+    const base64 = arrayBufferToBase64(arrayBuffer);
+    const result = await videoService.save(base64);
+    if (result?.filePath) {
+      captureStatus.value = `${t('capture.videoSaved')} ${result.filePath}`;
+    } else {
+      captureStatus.value = t('capture.videoSaveError');
+    }
+  } catch (error) {
+    captureStatus.value = `${t('capture.videoSaveError')} ${error?.message || ''}`.trim();
+  } finally {
+    isRecording.value = false;
+    updateTrayRecording(false);
+  }
+};
+
+const toggleVideoRecording = () => {
+  return isRecording.value ? stopVideoRecording() : startVideoRecording();
+};
+
 const testS3Connection = async () => {
   if (!window.electronAPI?.checkS3Connection) {
     s3TestStatus.value = t('settings.s3TestUnavailable');
@@ -321,13 +384,15 @@ const actions = computed(() => [
     title: t('actions.recordButton'),
     subtitle: t('actions.recordSubtitle'),
     icon: 'record',
+    active: isRecording.value,
   },
 ]);
 
 const actionHandlers = {
   fullscreen: captureFullScreen,
   area: captureArea,
-  record: startRecording,
+  record: toggleVideoRecording,
+  'stop-recording': stopVideoRecording,
   settings: openSettings,
 };
 

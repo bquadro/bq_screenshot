@@ -21,6 +21,7 @@ export default class TrayController {
     this.app = appInstance;
     this.getWindow = getWindow;
     this.tray = null;
+    this.isRecording = false;
     const iconPath = this.resolveAssetPath(PLATFORM_DIRECTION[process.platform] || PLATFORM_DIRECTION.linux);
     this.icon = iconPath ? nativeImage.createFromPath(iconPath) : nativeImage.createFromDataURL(TRAY_ICON_DATA_URL);
     if (this.icon.isEmpty()) {
@@ -40,7 +41,7 @@ export default class TrayController {
   }
 
   buildMenu() {
-    return Menu.buildFromTemplate([
+    const template = [
       {
         label: 'Скриншот экрана',
         click: () => {
@@ -59,6 +60,13 @@ export default class TrayController {
           this.sendAction('record');
         },
       },
+      {
+        label: 'Остановить запись',
+        enabled: this.isRecording,
+        click: () => {
+          this.sendAction('stop-recording');
+        },
+      },
       { type: 'separator' },
       {
         label: 'Настройки',
@@ -73,7 +81,9 @@ export default class TrayController {
           this.app.quit();
         },
       },
-    ]);
+    ];
+
+    return Menu.buildFromTemplate(template);
   }
 
   showWindow() {
@@ -115,6 +125,14 @@ export default class TrayController {
     }
     this.tray.destroy();
     this.tray = null;
+  }
+
+  setRecordingState(isRecording) {
+    this.isRecording = isRecording;
+    if (!this.tray) {
+      return;
+    }
+    this.tray.setContextMenu(this.buildMenu());
   }
 
   resolveAssetPath(filename) {

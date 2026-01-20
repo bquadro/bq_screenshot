@@ -24,6 +24,7 @@ export default class IpcHandlers {
     ipcMain.handle('capture-screenshot', () => this.handleCaptureScreenshot());
     ipcMain.handle('choose-save-folder', () => this.handleChooseSaveFolder());
     ipcMain.handle('save-screenshot', (_event, payload) => this.handleSaveScreenshot(payload));
+    ipcMain.handle('save-video', (_event, payload) => this.handleSaveVideo(payload));
     ipcMain.handle('upload-screenshot', (_event, filePath) => this.handleUploadScreenshot(filePath));
     ipcMain.handle('check-s3-connection', () => this.handleCheckS3Connection());
   }
@@ -74,6 +75,25 @@ export default class IpcHandlers {
 
     await mkdir(path.dirname(filePath), { recursive: true });
     await writeFile(filePath, screenshotBuffer);
+
+    return { canceled: false, filePath };
+  }
+
+  async handleSaveVideo(payload = {}) {
+    const { data } = payload;
+    if (!data) {
+      throw new Error('Отсутствуют данные видео');
+    }
+
+    const videoBuffer = Buffer.from(data, 'base64');
+    const settings = await this.settingsStorage.load();
+    const configuredFolder = settings.storage?.folder?.trim() || this.fallbackFolder;
+    const targetFolder = path.resolve(configuredFolder);
+    const fileName = `bq-video-${Date.now()}.webm`;
+    const filePath = path.join(targetFolder, fileName);
+
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, videoBuffer);
 
     return { canceled: false, filePath };
   }

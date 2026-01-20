@@ -36,5 +36,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   registerGlobalHotkeys: (bindings) => ipcRenderer.invoke('register-global-hotkeys', bindings),
   showMainWindow: () => ipcRenderer.invoke('show-main-window'),
   uploadScreenshot: (filePath) => ipcRenderer.invoke('upload-screenshot', filePath),
+  saveVideo: (payload) => ipcRenderer.invoke('save-video', payload),
+  setTrayRecordingState: (isRecording) => ipcRenderer.invoke('set-tray-recording', isRecording),
   checkS3Connection: () => ipcRenderer.invoke('check-s3-connection'),
 });

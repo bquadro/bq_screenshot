@@ -6,10 +6,11 @@
         <button
           v-for="action in actions"
           :key="action.key"
-          class="btn btn-outline-secondary btn-icon"
-          type="button"
+        class="btn btn-outline-secondary btn-icon"
+        type="button"
           :title="action.title"
           @click="$emit('run-action', action.key)"
+        :class="{ 'btn-recording': action.active }"
         >
           <span class="visually-hidden">{{ action.title }}</span>
           <svg v-if="action.icon === 'fullscreen'" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -100,3 +101,14 @@ const handleOpenSettings = () => emit('open-settings');
 const handleGoHome = () => emit('go-home');
 
 </script>
+
+<style scoped>
+.btn-recording {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-recording svg {
+  color: #dc3545;
+}
+</style>
