@@ -77,12 +77,14 @@ import ImageEditorPage from './components/ImageEditorPage.vue';
 import LocalizationService from './classes/LocalizationService.js';
 import SettingsService from './classes/SettingsService.js';
 import CaptureService from './classes/CaptureService.js';
+import HotkeyController from './classes/HotkeyController.js';
 import translations from './lang/index.js';
 import uiConfig from './config/ui.js';
 
 const localizationService = new LocalizationService(translations);
 const settingsService = new SettingsService();
 const captureService = new CaptureService();
+const hotkeyController = new HotkeyController();
 
 // Возвращает шаблон структуры формы настроек.
 const createDefaultForm = () => ({
@@ -91,10 +93,10 @@ const createDefaultForm = () => ({
   videoCapture: false,
   screenshotEditor: true,
   minimizeToTray: true,
-  hotkeyFullScreen: 'CmdOrCtrl+Shift+1',
-  hotkeyArea: 'CmdOrCtrl+Shift+2',
-  hotkeyVideo: 'CmdOrCtrl+Shift+3',
-  hotkeyEditor: 'CmdOrCtrl+Shift+4',
+  hotkeyFullScreen: 'CmdOrCtrl+Shift+W',
+  hotkeyArea: 'CmdOrCtrl+Shift+E',
+  hotkeyVideo: 'CmdOrCtrl+Shift+R',
+  hotkeyEditor: 'CmdOrCtrl+Shift+T',
   saveFolder: '',
   uploadToS3: false,
   s3Endpoint: '',
@@ -155,6 +157,11 @@ const applyLoadedSettings = (loaded) => {
   settingsForm.s3SecretKey = loaded.s3?.secretKey || settingsForm.s3SecretKey;
   settingsForm.s3UseSsl = Boolean(loaded.s3?.useSsl);
   language.value = loaded.language || language.value;
+  registerHotkeys();
+};
+
+const registerHotkeys = () => {
+  hotkeyController.register(buildHotkeyBindings());
 };
 
 const gatherPayload = () => ({
@@ -221,6 +228,7 @@ const saveSettings = async () => {
     settingsStatus.value = t('settings.statusSaveError');
   } finally {
     isSaving.value = false;
+    registerHotkeys();
   }
 };
 
@@ -323,6 +331,23 @@ const actionHandlers = {
   settings: openSettings,
 };
 
+const buildHotkeyBindings = () => {
+  const bindings = {};
+  if (settingsForm.fullScreenCapture && settingsForm.hotkeyFullScreen?.trim()) {
+    bindings[settingsForm.hotkeyFullScreen.trim()] = captureFullScreen;
+  }
+  if (settingsForm.areaCapture && settingsForm.hotkeyArea?.trim()) {
+    bindings[settingsForm.hotkeyArea.trim()] = captureArea;
+  }
+  if (settingsForm.videoCapture && settingsForm.hotkeyVideo?.trim()) {
+    bindings[settingsForm.hotkeyVideo.trim()] = startRecording;
+  }
+  if (settingsForm.screenshotEditor && settingsForm.hotkeyEditor?.trim()) {
+    bindings[settingsForm.hotkeyEditor.trim()] = openSettings;
+  }
+  return bindings;
+};
+
 const handleAction = (key) => {
   // Вызываем обработчик для выбранного действия.
   actionHandlers[key]?.();
@@ -390,6 +415,7 @@ onBeforeUnmount(() => {
   if (trayActionRemover) {
     trayActionRemover();
   }
+  hotkeyController.dispose();
 });
 
 </script>
