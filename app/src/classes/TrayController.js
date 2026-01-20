@@ -71,11 +71,24 @@ export default class TrayController {
     if (!win) {
       return;
     }
+    this.showDock();
     if (win.isMinimized()) {
       win.restore();
     }
     win.show();
     win.focus();
+  }
+
+  showDock() {
+    if (process.platform === 'darwin' && this.app?.dock) {
+      this.app.dock.show();
+    }
+  }
+
+  hideDock() {
+    if (process.platform === 'darwin' && this.app?.dock) {
+      this.app.dock.hide();
+    }
   }
 
   sendAction(action) {

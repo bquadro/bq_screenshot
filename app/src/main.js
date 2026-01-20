@@ -33,16 +33,21 @@ const createMainWindow = () => {
   mainWindow.on('minimize', (event) => {
     event.preventDefault();
     trayController.ensure();
+    trayController.hideDock();
     mainWindow.hide();
   });
 
   mainWindow.on('close', (event) => {
-    if (quitRequested || process.platform === 'darwin') {
+    if (quitRequested) {
       return;
     }
     event.preventDefault();
     trayController.ensure();
+    trayController.hideDock();
     mainWindow.hide();
+  });
+  mainWindow.on('show', () => {
+    trayController.showDock();
   });
 };
 
@@ -60,6 +65,7 @@ app.whenReady().then(() => {
     } else if (mainWindow) {
       mainWindow.show();
       mainWindow.focus();
+      trayController.showDock();
     }
   });
 });
