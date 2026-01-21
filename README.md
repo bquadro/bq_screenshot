@@ -99,12 +99,29 @@ npm run lint     # заглушка, возвращает "No linting configured
 2. Установку зависимостей (`npm install`).
 3. Сборку `make` для генерации `.dmg`.
 4. Вызов `npm run publish` (предварительно убедитесь, что экспортированы Apple credentials и настроены подписанные сертификаты).
+5. `electron-forge make` теперь собирает только `.app/` без `.dmg`, поэтому запуск `node scripts/create_dmg.js` вручную (или через `scripts/build_publish_mac.sh`) превращает `.app` в `.dmg` с помощью `electron-installer-dmg`, обходя `macos-alias`.
 
 Перед запуском скрипта необходимо:
 
 - настроить `APPLE_ID`, `APPLE_ID_PASSWORD` и другие переменные (например, `CSC_LINK`, `CSC_KEY_PASSWORD`) для `electron-forge`.
 - следить, чтобы `forge.config.js` был корректно сконфигурирован для macOS (подпись, notarize).
 - убедиться, что локально установлена Node.js 25 (например, через `nvm use stable`), иначе скрипт выдаст ошибку.
+
+## Скрипт сборки Windows-пакета
+
+Для генерации Windows-инсталлятора (Squirrel/ZIP) используйте PowerShell-скрипт:
+
+```powershell
+./scripts/build_publish_windows.ps1
+```
+
+Он проверяет `node --version` (требуется 25.x), запускает `npm install` и `npm run make -- --platform=win32 --arch=x64`. После успешного выполнения установщик/ZIP окажутся в `app/out/make/win32-x64`.
+
+Перед запуском убедитесь, что:
+
+- установлены Windows Build Tools (Visual Studio Build Tools, Python 3) для `node-gyp`.
+- заданы `CSC_LINK`, `CSC_KEY_PASSWORD` и `CSC_NAME`, если вы подписываете MSI/EXE.
+- переменные `GITHUB_OWNER`/`GITHUB_REPO` настроены, если будете использовать GitHub publisher.
 
 ## Подготовка к публикации в App Store (сертификаты и идентификация)
 

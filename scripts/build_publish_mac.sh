@@ -19,6 +19,9 @@ npm install
 echo "Creating make artifacts..."
 npm run make
 
+echo "Packaging DMG via electron-installer-dmg script..."
+node ./create_dmg.js
+
 echo "Publishing via electron-forge..."
 # Ensure Apple credentials (APPLE_ID, APPLE_ID_PASSWORD, etc.) are exported before running publish.
 npm run publish

@@ -55,13 +55,6 @@ module.exports = {
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-dmg',
-      platforms: ['darwin'],
-      config: {
-        icon: path.join(__dirname, 'src', 'assets', 'app-icon.icns'),
-      },
-    },
-    {
       name: '@electron-forge/maker-squirrel',
       config: {},
     },
