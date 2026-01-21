@@ -99,7 +99,7 @@ npm run lint     # заглушка, возвращает "No linting configured
 2. Установку зависимостей (`npm install`).
 3. Сборку `make` для генерации `.dmg`.
 4. Вызов `npm run publish` (предварительно убедитесь, что экспортированы Apple credentials и настроены подписанные сертификаты).
-5. `electron-forge make` теперь собирает только `.app/` без `.dmg`, поэтому запуск `node scripts/create_dmg.js` вручную (или через `scripts/build_publish_mac.sh`) превращает `.app` в `.dmg` с помощью `electron-installer-dmg`, обходя `macos-alias`.
+5. `electron-forge make` теперь выпускает ZIP-архивы для macOS. `scripts/build_publish_mac.sh` автоматически распаковывает первый найденный ZIP (путь вида `out/make/zip/darwin/*/*.zip`) и вызывает `hdiutil` напрямую, чтобы получить `.dmg` в `out/make/dmg`, поэтому запуск дополнительных JS-обёрток не нужен.
 
 Перед запуском скрипта необходимо:
 
