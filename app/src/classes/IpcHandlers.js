@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from 'electron';
+import { dialog, desktopCapturer, ipcMain } from 'electron';
 import path from 'node:path';
 import { writeFile, mkdir } from 'node:fs/promises';
 import screenshot from 'screenshot-desktop';
@@ -27,6 +27,7 @@ export default class IpcHandlers {
     ipcMain.handle('save-video', (_event, payload) => this.handleSaveVideo(payload));
     ipcMain.handle('upload-screenshot', (_event, filePath) => this.handleUploadScreenshot(filePath));
     ipcMain.handle('check-s3-connection', () => this.handleCheckS3Connection());
+    ipcMain.handle('get-desktop-source', () => this.handleGetDesktopSource());
   }
 
   async handleCaptureScreenshot() {
@@ -110,5 +111,16 @@ export default class IpcHandlers {
       return { success: false, errorCode: 'MISSING_CONTROLLER', error: 'Upload controller unavailable.' };
     }
     return this.uploadController.checkConnection();
+  }
+
+  async handleGetDesktopSource() {
+    const sources = await desktopCapturer.getSources({
+      types: ['screen'],
+      thumbnailSize: { width: 0, height: 0 },
+    });
+    if (!sources?.length) {
+      throw new Error('desktop-source-unavailable');
+    }
+    return sources[0].id;
   }
 }

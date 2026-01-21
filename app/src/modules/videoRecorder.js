@@ -1,79 +1,165 @@
+import RecordRTC from 'recordrtc';
+
 export default class VideoRecorder {
   constructor() {
-    this.mediaRecorder = null;
+    this.recorder = null;
     this.stream = null;
-    this.chunks = [];
+    this.recording = false;
   }
 
   get isRecording() {
-    return this.mediaRecorder && this.mediaRecorder.state !== 'inactive';
+    return this.recording;
   }
 
   async start() {
-    if (!navigator.mediaDevices?.getDisplayMedia) {
-      throw new Error('display-media-not-supported');
-    }
     if (this.isRecording) {
       throw new Error('already-recording');
     }
 
-    this.stream = await navigator.mediaDevices.getDisplayMedia({
-      video: { frameRate: 30 },
-      audio: false,
+    this.stream = await this.acquireStream();
+    try {
+      this.recorder = this.createRecorder(this.stream);
+      await this.recorder.startRecording();
+      this.recording = true;
+    } catch (error) {
+      this.cleanup();
+      throw error;
+    }
+  }
+
+  async stop() {
+    if (!this.isRecording || !this.recorder) {
+      return null;
+    }
+
+    try {
+      await this.recorder.stopRecording();
+      const blob = await this.recorder.getBlob();
+      return blob;
+    } finally {
+      this.cleanup();
+    }
+  }
+
+  cleanup() {
+    this.stream?.getTracks().forEach((track) => {
+      track.stop();
     });
-    this.mediaRecorder = this.createMediaRecorder([
+    this.stream = null;
+
+    if (this.recorder) {
+      if (typeof this.recorder.destroy === 'function') {
+        this.recorder.destroy();
+      } else if (typeof this.recorder.reset === 'function') {
+        this.recorder.reset();
+      }
+    }
+    this.recorder = null;
+    this.recording = false;
+  }
+
+  async acquireStream() {
+    const mediaDevices = navigator.mediaDevices;
+    if (!mediaDevices) {
+      throw new Error('media-devices-unavailable');
+    }
+
+    if (typeof mediaDevices.getDisplayMedia === 'function') {
+      try {
+        return await mediaDevices.getDisplayMedia({
+          video: { frameRate: 30 },
+          audio: false,
+        });
+      } catch (error) {
+        if (!this.isDisplayMediaUnsupportedError(error)) {
+          throw error;
+        }
+        console.warn('display media unsupported, falling back to desktop capture', error?.message);
+      }
+    }
+
+    return this.acquireDesktopCaptureStream(mediaDevices);
+  }
+
+  isDisplayMediaUnsupportedError(error) {
+    const reason = `${error?.name || ''} ${error?.message || ''}`.toLowerCase();
+    return reason.includes('not supported') || reason.includes('notsupported') || reason.includes('unsupported');
+  }
+
+  async acquireDesktopCaptureStream(mediaDevices) {
+    if (typeof mediaDevices.getUserMedia !== 'function') {
+      throw new Error('media-devices-not-supported');
+    }
+
+    const sourceGetter = window?.electronAPI?.getPrimaryScreenSourceId;
+    if (typeof sourceGetter !== 'function') {
+      throw new Error('desktop-capture-unavailable');
+    }
+
+    const sourceId = await sourceGetter();
+    if (!sourceId) {
+      throw new Error('desktop-source-unavailable');
+    }
+
+    return mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        mandatory: {
+          chromeMediaSource: 'desktop',
+          chromeMediaSourceId: sourceId,
+          frameRate: 30,
+        },
+        cursor: 'always',
+      },
+    });
+  }
+
+  createRecorder(stream) {
+    const handler = RecordRTC?.RecordRTCPromisesHandler;
+    if (typeof handler !== 'function') {
+      throw new Error('recordrtc-handler-unavailable');
+    }
+
+    const options = {
+      type: 'video',
+      disableLogs: true,
+      timeSlice: 0,
+      bitsPerSecond: 2500000,
+      videoBitsPerSecond: 2500000,
+      frameRate: 30,
+    };
+
+    const mimeType = this.selectSupportedMimeType([
       'video/webm;codecs=vp9',
       'video/webm;codecs=vp8',
       'video/webm',
     ]);
-    this.chunks = [];
 
-    this.mediaRecorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) {
-        this.chunks.push(event.data);
-      }
-    };
+    if (mimeType) {
+      options.mimeType = mimeType;
+    }
 
-    this.mediaRecorder.onerror = (event) => {
-      console.error('mediaRecorder error', event.error);
-    };
-
-    this.mediaRecorder.start(1000);
+    return new handler(stream, options);
   }
 
-  createMediaRecorder(candidates = []) {
-    for (const mimeType of candidates) {
+  selectSupportedMimeType(candidates = []) {
+    if (typeof MediaRecorder === 'undefined' || typeof MediaRecorder.isTypeSupported !== 'function') {
+      return candidates[0] || '';
+    }
+
+    for (const candidate of candidates) {
+      if (!candidate) {
+        continue;
+      }
       try {
-        if (mimeType && !MediaRecorder.isTypeSupported(mimeType)) {
-          continue;
+        if (MediaRecorder.isTypeSupported(candidate)) {
+          return candidate;
         }
-        return new MediaRecorder(this.stream, mimeType ? { mimeType } : undefined);
       } catch (error) {
-        console.warn('mediaRecorder unsupported mime type', mimeType, error?.message);
+        console.warn('Error checking support for mime type', candidate, error?.message);
       }
     }
-    try {
-      return new MediaRecorder(this.stream);
-    } catch (error) {
-      console.error('mediaRecorder initialization failed', error);
-      throw new Error('media-recorder-not-supported');
-    }
-  }
 
-  stop() {
-    if (!this.isRecording) {
-      return Promise.resolve(null);
-    }
-
-    return new Promise((resolve) => {
-      this.mediaRecorder.onstop = () => {
-        const blob = new Blob(this.chunks, { type: this.mediaRecorder.mimeType || 'video/webm' });
-        this.stream?.getTracks().forEach((track) => track.stop());
-        this.stream = null;
-        this.mediaRecorder = null;
-        resolve(blob);
-      };
-      this.mediaRecorder.stop();
-    });
+    return candidates[0] || '';
   }
 }

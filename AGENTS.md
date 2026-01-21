@@ -49,6 +49,7 @@
 2. Горячие клавищи https://github.com/jaywcjlove/hotkeys-js
    Информация о  пакете app/node_modules/hotkeys-js/README.md
 3. Редактор изображений https://github.com/nhn/tui.image-editor/tree/master/apps/vue-image-editor
+4. Запись видео https://github.com/muaz-khan/RecordRTC
 
 # Требуется доработать
  Запись видео падает в  ошибку

@@ -10,6 +10,10 @@ const captureScreenshot = async () => {
   return Buffer.from(buffer).toString('base64');
 };
 
+const getPrimaryScreenSourceId = async () => {
+  return ipcRenderer.invoke('get-desktop-source');
+};
+
 const onTrayAction = (callback) => {
   if (typeof callback !== 'function') {
     return () => {};
@@ -39,4 +43,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveVideo: (payload) => ipcRenderer.invoke('save-video', payload),
   setTrayRecordingState: (isRecording) => ipcRenderer.invoke('set-tray-recording', isRecording),
   checkS3Connection: () => ipcRenderer.invoke('check-s3-connection'),
+  getPrimaryScreenSourceId,
 });
