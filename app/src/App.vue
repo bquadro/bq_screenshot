@@ -18,6 +18,7 @@
       :preview-url="previewUrl"
       :uploaded-link="uploadedLink"
       :link-status="linkStatus"
+      :upload-progress-label="uploadProgressLabel"
       :copy-link-label="t('capture.linkCopyButton')"
       @copy-link="copyUploadedLink"
     />
@@ -116,7 +117,11 @@ const languageOptions = ['ru', 'en'];
 const currentPage = ref('home');
 const editorImage = ref('');
 const areaImage = ref('');
+const isUploadingVideo = ref(false);
+const uploadProgress = ref(0);
+const currentUploadId = ref('');
 let trayActionRemover = null;
+let uploadProgressRemover = null;
 const screenshotPath = ref('');
 const uploadedLink = ref('');
 const linkStatus = ref('');
@@ -147,7 +152,15 @@ const handleLanguageUpdate = (value) => {
 };
 
 // Удобный доступ к переводу по ключу.
-const t = (key) => localizationService.t(key);
+const t = (key, replacements = {}) => localizationService.t(key, replacements);
+
+const uploadProgressLabel = computed(() => {
+  if (!isUploadingVideo.value) {
+    return '';
+  }
+  const percent = Math.max(0, Math.min(100, Math.round(uploadProgress.value)));
+  return t('capture.uploadProgress', { percent });
+});
 
 const { updateUploadLink, copyUploadedLink } = useUploadLink({
   settingsForm,
@@ -156,6 +169,15 @@ const { updateUploadLink, copyUploadedLink } = useUploadLink({
   linkStatus,
   t,
 });
+
+const handleUploadProgress = (payload) => {
+  if (!payload || payload.uploadId !== currentUploadId.value) {
+    return;
+  }
+  if (typeof payload.percent === 'number') {
+    uploadProgress.value = payload.percent;
+  }
+};
 
 const {
   captureFullScreen,
@@ -281,6 +303,19 @@ const updateTrayRecording = (value) => {
   }
 };
 
+const trackVideoUpload = async (filePath) => {
+  const uploadId = `video-upload-${Date.now()}`;
+  currentUploadId.value = uploadId;
+  isUploadingVideo.value = true;
+  uploadProgress.value = 0;
+  try {
+    await updateUploadLink(filePath, { contentType: 'video/webm', uploadId });
+  } finally {
+    isUploadingVideo.value = false;
+    currentUploadId.value = '';
+  }
+};
+
 const startVideoRecording = async () => {
   captureStatus.value = t('capture.statusRecording');
   try {
@@ -309,6 +344,9 @@ const stopVideoRecording = async () => {
     const result = await videoService.save(base64);
     if (result?.filePath) {
       captureStatus.value = `${t('capture.videoSaved')} ${result.filePath}`;
+      isRecording.value = false;
+      updateTrayRecording(false);
+      await trackVideoUpload(result.filePath);
     } else {
       captureStatus.value = t('capture.videoSaveError');
     }
@@ -428,12 +466,18 @@ onMounted(() => {
     if (window.electronAPI.onTrayAction) {
       trayActionRemover = window.electronAPI.onTrayAction(handleAction);
     }
+    if (window.electronAPI.onUploadProgress) {
+      uploadProgressRemover = window.electronAPI.onUploadProgress(handleUploadProgress);
+    }
   }
 });
 
 onBeforeUnmount(() => {
   if (trayActionRemover) {
     trayActionRemover();
+  }
+  if (uploadProgressRemover) {
+    uploadProgressRemover();
   }
 });
 

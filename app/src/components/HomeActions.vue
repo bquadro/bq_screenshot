@@ -20,6 +20,7 @@
         <p class="text-break small text-muted mb-0">{{ uploadedLink }}</p>
       </div>
       <p v-if="linkStatus" class="small text-muted mt-2">{{ linkStatus }}</p>
+      <p v-if="uploadProgressLabel" class="small text-muted mt-2">{{ uploadProgressLabel }}</p>
     </div>
   </section>
 </template>
@@ -53,6 +54,10 @@ const {
   copyLinkLabel: {
     type: String,
     default: 'Copy link',
+  },
+  uploadProgressLabel: {
+    type: String,
+    default: '',
   },
 });
 

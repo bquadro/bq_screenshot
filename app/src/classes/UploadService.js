@@ -1,8 +1,8 @@
 export default class UploadService {
-  async upload(filePath) {
-    if (!window.electronAPI?.uploadScreenshot) {
+  async upload(filePath, options = {}) {
+    if (!window.electronAPI?.uploadFile) {
       return { url: null };
     }
-    return window.electronAPI.uploadScreenshot(filePath);
+    return window.electronAPI.uploadFile({ filePath, ...options });
   }
 }

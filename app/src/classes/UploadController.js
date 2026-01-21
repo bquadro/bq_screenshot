@@ -1,14 +1,17 @@
 import { clipboard } from 'electron';
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
-import { S3Client, PutObjectCommand, HeadBucketCommand } from '@aws-sdk/client-s3';
+import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
+import { lookup } from 'mime-types';
+import { S3Client, HeadBucketCommand } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 
 export default class UploadController {
   constructor(settingsStorage) {
     this.settingsStorage = settingsStorage;
   }
 
-  async upload(filePath) {
+  async upload(filePath, { contentType } = {}, onProgress) {
     if (!filePath) {
       return { url: null };
     }
@@ -19,19 +22,77 @@ export default class UploadController {
     try {
       const client = this.createClient(config);
       const key = path.basename(filePath);
-      const buffer = await readFile(filePath);
-      const command = new PutObjectCommand({
-        Bucket: config.bucket,
-        Key: key,
-        Body: buffer,
-        ContentType: 'image/png',
+      const resolvedType = contentType || lookup(filePath) || 'application/octet-stream';
+      const fileStats = await stat(filePath);
+      const totalBytes = fileStats?.size || 0;
+      const stream = createReadStream(filePath);
+
+      const upload = new Upload({
+        client,
+        params: {
+          Bucket: config.bucket,
+          Key: key,
+          Body: stream,
+          ContentType: resolvedType,
+          ContentLength: totalBytes,
+        },
       });
-      await client.send(command);
+
+      let uploadedBytes = 0;
+      let lastPercent = -1;
+
+      const notifyProgress = (payload) => {
+        if (typeof onProgress === 'function') {
+          onProgress(payload);
+        }
+      };
+
+      const notifyPercent = (percent) => {
+        if (typeof percent !== 'number') {
+          return;
+        }
+        const normalized = Math.min(100, Math.max(0, Math.round(percent)));
+        if (normalized === lastPercent) {
+          return;
+        }
+        lastPercent = normalized;
+        notifyProgress({ percent: normalized });
+      };
+
+      stream.on('data', (chunk) => {
+        uploadedBytes += chunk.length;
+        if (totalBytes > 0) {
+          const percent = (uploadedBytes / totalBytes) * 100;
+          notifyPercent(percent);
+        }
+      });
+
+      stream.on('error', (error) => {
+        notifyProgress({ error: error?.message || error });
+      });
+
+      upload.on('httpUploadProgress', (progress) => {
+        if (typeof progress?.loaded === 'number') {
+          let percent;
+          if (typeof progress?.total === 'number' && progress.total > 0) {
+            percent = (progress.loaded / progress.total) * 100;
+          } else if (totalBytes > 0) {
+            percent = (progress.loaded / totalBytes) * 100;
+          }
+          notifyPercent(percent);
+        }
+      });
+
+      await upload.done();
+      notifyPercent(100);
       const url = this.buildUrl(config, key);
       clipboard.writeText(url);
       return { url };
     } catch (error) {
       console.error('upload screenshot', error);
+      if (typeof onProgress === 'function') {
+        onProgress({ error: error?.message || error });
+      }
       return { url: null, error: error.message };
     }
   }

@@ -1,5 +1,5 @@
 export function useUploadLink({ settingsForm, uploadService, uploadedLink, linkStatus, t }) {
-  const updateUploadLink = async (filePath) => {
+  const updateUploadLink = async (filePath, options = {}) => {
     if (!filePath) {
       uploadedLink.value = '';
       linkStatus.value = '';
@@ -12,7 +12,7 @@ export function useUploadLink({ settingsForm, uploadService, uploadedLink, linkS
     }
 
     try {
-      const { url, error } = await uploadService.upload(filePath);
+      const { url, error } = await uploadService.upload(filePath, options);
       if (url) {
         uploadedLink.value = url;
         linkStatus.value = t('capture.linkCopied');

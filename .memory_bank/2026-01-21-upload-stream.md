@@ -1,0 +1,3 @@
+## Upload stream fix
+- заменил `PutObjectCommand` на `Upload` из `@aws-sdk/lib-storage`, чтобы хэш вычислялся корректно и больше не падала ошибка `Unable to calculate hash for flowing readable stream` (`app/src/classes/UploadController.js:1-46`);
+- `Upload` продолжает эмитить `httpUploadProgress`, откуда берём проценты и передаём через callback в main/renderer; добавил `ContentLength` в параметры `Upload`, чтобы SDK знал общий размер и мог вычислять проценты (то, что раньше мешало — `Unable to calculate hash for flowing readable stream`), а потому `stream.on('data')` теперь дополняет расчёт до получения HTTP-событий.

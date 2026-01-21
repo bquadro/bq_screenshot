@@ -1,21 +1,30 @@
 export default class LocalizationService {
   constructor(dictionary, defaultLanguage = 'ru') {
-    // Храним словари переводов и инициализируем язык.
     this.dictionary = dictionary;
     this.currentLanguage = defaultLanguage;
   }
 
-  t(key) {
-    // Возвращает перевод по ключу для текущего языка, или fallback на русский.
-    return (
+  t(key, replacements = {}) {
+    const text =
       this.dictionary[this.currentLanguage]?.[key] ??
       this.dictionary.ru[key] ??
-      ''
-    );
+      '';
+
+    if (!text || !replacements || typeof replacements !== 'object') {
+      return text;
+    }
+
+    return Object.entries(replacements).reduce((message, [placeholder, value]) => {
+      if (!message) {
+        return message;
+      }
+      const safeValue = value ?? '';
+      const token = new RegExp(`\\{${placeholder}\\}`, 'g');
+      return message.replace(token, safeValue);
+    }, text);
   }
 
   setLanguage(value) {
-    // Меняет текущий язык, если значение допустимо, иначе сбрасывает на русский.
     if (!value || !this.dictionary[value]) {
       this.currentLanguage = 'ru';
     } else {

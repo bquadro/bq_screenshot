@@ -12,6 +12,7 @@ export default {
   'capture.statusNoPath': 'Скриншот создан, но путь не получен.',
   'capture.videoSaved': 'Видео сохранено:',
   'capture.videoSaveError': 'Ошибка сохранения видео:',
+  'capture.uploadProgress': 'Загрузка в облако: {percent}%',
   'capture.statusError': 'Ошибка при создании скриншота:',
   'capture.statusUnknownError': 'Неизвестная ошибка',
   'capture.statusAreaError': 'Не удалось получить область экрана.',

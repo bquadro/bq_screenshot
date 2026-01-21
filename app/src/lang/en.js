@@ -10,6 +10,7 @@ export default {
   'capture.statusSaved': 'Screenshot saved:',
   'capture.videoSaved': 'Video saved:',
   'capture.videoSaveError': 'Error saving video:',
+  'capture.uploadProgress': 'Uploading to cloud: {percent}%',
   'capture.areaSelecting': 'Select an area...',
   'capture.statusNoPath': 'Screenshot created but the path is unavailable.',
   'capture.statusError': 'Screenshot creation error:',

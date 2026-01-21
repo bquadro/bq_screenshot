@@ -25,7 +25,7 @@ export default class IpcHandlers {
     ipcMain.handle('choose-save-folder', () => this.handleChooseSaveFolder());
     ipcMain.handle('save-screenshot', (_event, payload) => this.handleSaveScreenshot(payload));
     ipcMain.handle('save-video', (_event, payload) => this.handleSaveVideo(payload));
-    ipcMain.handle('upload-screenshot', (_event, filePath) => this.handleUploadScreenshot(filePath));
+    ipcMain.handle('upload-file', (event, payload) => this.handleUploadFile(payload, event));
     ipcMain.handle('check-s3-connection', () => this.handleCheckS3Connection());
     ipcMain.handle('get-desktop-source', () => this.handleGetDesktopSource());
   }
@@ -99,11 +99,28 @@ export default class IpcHandlers {
     return { canceled: false, filePath };
   }
 
-  async handleUploadScreenshot(filePath) {
+  async handleUploadFile(payload = {}, event) {
     if (!this.uploadController) {
       return { url: null };
     }
-    return this.uploadController.upload(filePath);
+    const { filePath, contentType, uploadId } = payload || {};
+    if (!filePath) {
+      return { url: null };
+    }
+
+    const progressCallback = (progress) => {
+      if (!uploadId || !event?.sender) {
+        return;
+      }
+      const percent = typeof progress?.percent === 'number' ? progress.percent : undefined;
+      event.sender.send('upload-progress', {
+        uploadId,
+        percent,
+        error: progress?.error,
+      });
+    };
+
+    return this.uploadController.upload(filePath, { contentType }, progressCallback);
   }
 
   async handleCheckS3Connection() {

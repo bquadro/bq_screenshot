@@ -29,6 +29,21 @@ const onTrayAction = (callback) => {
   };
 };
 
+const onUploadProgress = (callback) => {
+  if (typeof callback !== 'function') {
+    return () => {};
+  }
+
+  const listener = (_event, payload) => {
+    callback(payload);
+  };
+
+  ipcRenderer.on('upload-progress', listener);
+  return () => {
+    ipcRenderer.removeListener('upload-progress', listener);
+  };
+};
+
 contextBridge.exposeInMainWorld('electronAPI', {
   getElectronVersion: () => process.versions.electron,
   captureScreenshot,
@@ -39,9 +54,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onTrayAction,
   registerGlobalHotkeys: (bindings) => ipcRenderer.invoke('register-global-hotkeys', bindings),
   showMainWindow: () => ipcRenderer.invoke('show-main-window'),
-  uploadScreenshot: (filePath) => ipcRenderer.invoke('upload-screenshot', filePath),
+  uploadFile: (payload = {}) => ipcRenderer.invoke('upload-file', payload),
   saveVideo: (payload) => ipcRenderer.invoke('save-video', payload),
   setTrayRecordingState: (isRecording) => ipcRenderer.invoke('set-tray-recording', isRecording),
   checkS3Connection: () => ipcRenderer.invoke('check-s3-connection'),
   getPrimaryScreenSourceId,
+  onUploadProgress,
 });
